@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>万盛集团内部OA办公系统 v2.4 (Build 200511)</title>
+    <style>
+        /* 还原2006年传统企业OA系统的冰冷、刻板UI */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "SimSun", "宋体", Tahoma, Arial, sans-serif;
+            font-size: 12px;
+            background-color: #7898c1; /* 经典的Windows经典主题蓝背景 */
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 顶部通栏 */
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(to bottom, #eff4f9 0%, #c4d7eb 100%);
+            border-bottom: 1px solid #6b8cbd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .sys-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #003366;
+            font-family: "Hei", "黑体";
+        }
+
+        .user-info {
+            color: #333;
+        }
+        
+        .user-info strong { color: #d90000; }
+
+        /* 左侧菜单树 */
+        .sidebar {
+            width: 200px;
+            background-color: #eef3fa;
+            border-right: 1px solid #89a5c8;
+            height: calc(100vh - 50px);
+            margin-top: 50px;
+            padding-top: 10px;
+            box-sizing: border-box;
+        }
+
+        .menu-group {
+            margin-bottom: 10px;
+        }
+
+        .menu-title {
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAUCAYAAABMDlehAAAAF0lEQVQIW2P8//8/A8P////PQAJMAwwAAPo6O/qV/qH3AAAAAElFTkSuQmCC') repeat-x;
+            background-color: #c0d2e8;
+            border: 1px solid #89a5c8;
+            padding: 5px 10px;
+            font-weight: bold;
+            color: #003366;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+        .menu-items {
+            list-style: none;
+            padding: 0;
+            margin: 5px 0;
+        }
+
+        .menu-items li {
+            padding: 5px 10px 5px 30px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .menu-items li:hover, .menu-items li.active {
+            background-color: #d1e2f7;
+            color: #d90000;
+        }
+
+        /* 右侧主工作区 */
+        .main-workspace {
+            flex: 1;
+            background-color: #ffffff;
+            margin: 55px 5px 5px 5px;
+            border: 1px solid #89a5c8;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* 页面面板统一样式 */
+        .panel {
+            display: none;
+            padding: 20px;
+        }
+
+        .panel.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- 邮件详情区样式 --- */
+        .mail-header {
+            border: 1px solid #ccc;
+            background-color: #f7f7f7;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .mail-header table {
+            width: 100%;
+            font-size: 12px;
+        }
+
+        .mail-header td { padding: 3px; }
+        .mail-label { width: 80px; color: #666; text-align: right; padding-right: 10px; }
+
+        .mail-content {
+            border: 1px inset #ccc;
+            padding: 30px 40px;
+            background-color: #fff;
+            min-height: 300px;
+            font-size: 14px;
+            line-height: 2.0;
+            color: #000;
+        }
+
+        .villain-quote {
+            background-color: #fff0f0;
+            border-left: 3px solid #cc0000;
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-weight: bold;
+            color: #660000;
+        }
+
+        /* --- 财务流转查询区样式 --- */
+        .search-bar {
+            background-color: #f0f4f9;
+            border: 1px solid #aabccf;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar input[type="text"] {
+            border: 1px inset #ccc;
+            padding: 4px;
+            width: 250px;
+            margin-right: 10px;
+        }
+
+        .sys-btn {
+            background-color: #ece9d8;
+            border: 1px outset #fff;
+            padding: 4px 15px;
+            cursor: pointer;
+            color: #000;
+            font-family: "SimSun";
+        }
+        .sys-btn:active { border-style: inset; }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            display: none; /* 初始隐藏 */
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid #aabccf;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .data-table th {
+            background-color: #dbe4f0;
+            font-weight: bold;
+            color: #003366;
+        }
+
+        .data-table tr:nth-child(even) { background-color: #f9f9f9; }
+        .data-table tr:hover { background-color: #ffffcc; }
+
+        /* 高亮核心记录 */
+        .highlight-row {
+            background-color: #ffe6e6 !important;
+            font-weight: bold;
+        }
+        .huge-amount {
+            color: #cc0000;
+            font-size: 14px;
+        }
+
+        /* 水印 */
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 100px;
+            color: rgba(200, 200, 200, 0.1);
+            pointer-events: none;
+            white-space: nowrap;
+            font-family: "Hei";
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部通栏 -->
+    <div class="top-bar">
+        <div class="sys-title">万盛地产 - 企业信息管理门户 (ERP/OA)</div>
+        <div class="user-info">
+            当前登录：<strong>林娜 (董事长秘书办)</strong> | 权限级别：A级 | <a href="#" style="color: blue;">[安全退出]</a>
+        </div>
+    </div>
+
+    <!-- 左侧菜单树 -->
+    <div class="sidebar">
+        <div class="menu-group">
+            <div class="menu-title">[-] 内部沟通与审批</div>
+            <ul class="menu-items">
+                <li>待办审批 (0)</li>
+                <li class="active" onclick="switchPanel('panel-mail', this)">公关部高管邮件 (1)</li>
+                <li>人事调动存档</li>
+            </ul>
+        </div>
+        <div class="menu-group">
+            <div class="menu-title">[-] 财务管理系统</div>
+            <ul class="menu-items">
+                <li>月度财务报表</li>
+                <li onclick="switchPanel('panel-finance', this)">集团对公流转/付款查询</li>
+                <li>特殊账目申报</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 右侧主工作区 -->
+    <div class="main-workspace">
+        <div class="watermark">万 盛 企 业 机 密</div>
+
+        <!-- 面板1：公关部密邮 (默认显示) -->
+        <div id="panel-mail" class="panel active">
+            <div style="border-bottom: 2px solid #003366; padding-bottom: 5px; margin-bottom: 15px; font-weight: bold; font-size: 14px;">
+                读取邮件 - 收件箱
+            </div>
+            
+            <div class="mail-header">
+                <table cellspacing="0">
+                    <tr><td class="mail-label">发件人：</td><td>万国豪 (董事长) &lt;wanguohao@wansheng.com&gt;</td></tr>
+                    <tr><td class="mail-label">收件人：</td><td>公关部负责人；林娜</td></tr>
+                    <tr><td class="mail-label">发送时间：</td><td>2006-05-08 23:15:42</td></tr>
+                    <tr><td class="mail-label">邮件主题：</td><td><strong>【绝密】关于“万盛未来之星”名额及危机公关预案</strong></td></tr>
+                </table>
+            </div>
+
+            <div class="mail-content">
+                <p>公关部，林娜：</p>
+                <p>关于实验中学那个叫钟夜的穷学生，动作太慢了。后天就是我去做捐赠和签约仪式的日子，那笔账不能一直挂在外面不落地。</p>
+                
+                <div>
+                    夏唯如果拿不到那个保送名额，我们就没有理由给她拨那笔30万的‘专项奖学金’掩人耳目。告诉她，搞不走那个姓钟的第一名，她就给我滚。
+                </div>
+                
+                <p>去催一下她，伪造的证据已经找黑客给她做好了，她只需要去学校教务处递交一下就行。这丫头最近精神状态不太对，林娜，你亲自盯着她办完。一旦事成，立刻走财务流程把钱转过去。</p>
+                <p>另外，公关部提前准备好通稿。等学校通报一出，立马找本地媒体把钟某作弊的事情炒大，彻底转移视线。绝不能让任何人查到这笔钱真正的去向。</p>
+                <p>今晚记得来万豪酒店1402给我送东西。</p>
+
+                <br><br>
+                <p style="color: #888;">--<br>万国豪<br>万盛地产集团 董事局主席</p>
+            </div>
+        </div>
+
+        <!-- 面板2：财务流转查询 -->
+        <div id="panel-finance" class="panel">
+            <div style="border-bottom: 2px solid #003366; padding-bottom: 5px; margin-bottom: 15px; font-weight: bold; font-size: 14px;">
+                财务管理 - 集团对公付款流水查询
+            </div>
+
+            <div class="search-bar">
+                收款方名称/关键字：
+                <input type="text" id="search-input" placeholder="支持模糊匹配查询...">
+                <button class="sys-btn" onclick="searchFinance()">条件检索</button>
+            </div>
+
+            <div id="search-empty" style="text-align: center; color: #888; margin-top: 50px;">
+                请输入查询条件检索数据库。
+            </div>
+
+            <div id="search-loading" style="text-align: center; color: #003366; margin-top: 50px; display: none; font-weight: bold;">
+                <img src="data:image/gif;base64,R0lGODlhCwALAIAAAP8AAAAAACH5BAAAAAAALAAAAAALAAsAAAIQhI+py+0Po5y02ouzfqwLKAQAOw==" alt="loading" style="vertical-align: middle;"> 正在检索财务总账，请稍候...
+            </div>
+
+            <!-- 核心查询结果 -->
+            <table class="data-table" id="finance-table">
+                <thead>
+                    <tr>
+                        <th width="10%">流水号</th>
+                        <th width="15%">付款日期</th>
+                        <th width="15%">付款金额 (RMB)</th>
+                        <th width="15%">款项名目</th>
+                        <th width="20%">收款方/账户</th>
+                        <th width="15%">经办人</th>
+                        <th width="10%">状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>WS20050811</td><td>2005-08-15</td><td>￥ 3,000.00</td><td>劳务费</td><td>夏唯</td><td>林娜</td><td>已打款</td>
+                    </tr>
+                    <tr>
+                        <td>WS20050920</td><td>2005-09-22</td><td>￥ 5,000.00</td><td>劳务费</td><td>夏唯</td><td>林娜</td><td>已打款</td>
+                    </tr>
+                    <tr>
+                        <td>WS20051105</td><td>2005-11-06</td><td>￥ 5,000.00</td><td>劳务费</td><td>夏唯</td><td>林娜</td><td>已打款</td>
+                    </tr>
+                    <tr>
+                        <td>WS20060214</td><td>2006-02-14</td><td>￥ 8,000.00</td><td>特殊津贴</td><td>夏唯</td><td>林娜</td><td>已打款</td>
+                    </tr>
+                    <tr>
+                        <td>WS20060305</td><td>2006-03-05</td><td>￥ 5,000.00</td><td>劳务费</td><td>夏唯</td><td>林娜</td><td>已打款</td>
+                    </tr>
+                    <tr>
+                        <td>WS20060410</td><td>2006-04-10</td><td>￥ 5,000.00</td><td>劳务费</td><td>夏唯</td><td>林娜</td><td>已打款</td>
+                    </tr>
+                    <tr>
+                        <td>WS20060515</td><td>2006-05-15</td><td>￥ 8,000.00</td><td>活动劳务</td><td>夏唯</td><td>林娜</td><td>已打款</td>
+                    </tr>
+                    <tr>
+                        <td>WS20060601</td><td>2006-06-01</td><td>￥ 5,000.00</td><td>劳务费</td><td>夏唯</td><td>林娜</td><td>已打款</td>
+                    </tr>
+                    
+                    <!-- 剧情高潮：7月5日自杀当天的救命钱去向 -->
+                    <tr>
+                        <td>WS20060705</td>
+                        <td>2006-07-05</td>
+                        <td class="huge-amount">￥ 300,000.00</td>
+                        <td>奖学金</td>
+                        <td>夏唯</td>
+                        <td>林娜</td>
+                        <td style="color: green;">已打款</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- UI交互脚本 -->
+    <script>
+        // 左侧菜单切换逻辑
+        function switchPanel(panelId, element) {
+            // 切换菜单高亮
+            document.querySelectorAll('.menu-items li').forEach(function(el) {
+                el.classList.remove('active');
+            });
+            element.classList.add('active');
+
+            // 切换主工作区面板
+            document.querySelectorAll('.panel').forEach(function(el) {
+                el.classList.remove('active');
+            });
+            document.getElementById(panelId).classList.add('active');
+        }
+
+        // 财务查询逻辑 (心理施压效果)
+        function searchFinance() {
+            var keyword = document.getElementById('search-input').value.trim();
+            var emptyHint = document.getElementById('search-empty');
+            var loadingHint = document.getElementById('search-loading');
+            var dataTable = document.getElementById('finance-table');
+
+            if(keyword === "") return;
+
+            // 只要查询，就先重置状态
+            emptyHint.style.display = "none";
+            dataTable.style.display = "none";
+            loadingHint.style.display = "block";
+
+            // 模拟2006年慢速网络查询的延迟，增加悬疑感
+            setTimeout(function() {
+                loadingHint.style.display = "none";
+                
+                // 只有输入“夏唯”，才会展示惊悚的真相列表
+                if (keyword === "夏唯") {
+                    dataTable.style.display = "table";
+                } else {
+                    emptyHint.style.display = "block";
+                    emptyHint.innerText = "检索完毕：系统未找到与 [" + keyword + "] 相关的流转记录。";
+                    emptyHint.style.color = "red";
+                }
+            }, 1200);
+        }
+
+        // 监听回车键检索
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchFinance();
+            }
+        });
+    </script>
+</body>
+</html>

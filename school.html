@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>江城市实验中学 - 官方网站 (2006版)</title>
+    <style>
+        /* 还原2006年学校官网的经典复古排版 */
+        body {
+            background-color: #f0f8ff;
+            color: #333;
+            font-family: "SimSun", "宋体", Arial, sans-serif;
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 网页主容器 */
+        .wrapper {
+            width: 850px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-left: 1px solid #0055aa;
+            border-right: 1px solid #0055aa;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            min-height: 800px;
+        }
+
+        /* 头部红蓝经典配色 */
+        .header {
+            background-color: #0055aa;
+            height: 100px;
+            position: relative;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-family: "KaiTi", "楷体", serif;
+            font-size: 42px;
+            font-weight: bold;
+            margin: 0;
+            padding-top: 25px;
+            padding-left: 30px;
+            letter-spacing: 5px;
+            text-shadow: 2px 2px 2px #002244;
+        }
+
+        .header p {
+            color: #ccddff;
+            margin: 0;
+            padding-left: 35px;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        /* 导航栏 */
+        .nav-bar {
+            background-color: #e6f0fa;
+            border-bottom: 2px solid #0055aa;
+            padding: 8px 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .nav-bar a {
+            color: #004488;
+            text-decoration: none;
+            margin-right: 25px;
+        }
+
+        .nav-bar a:hover {
+            color: #ff0000;
+            text-decoration: underline;
+        }
+
+        /* 跑马灯公告 */
+        .marquee-box {
+            background-color: #ffffcc;
+            border-bottom: 1px solid #dddddd;
+            padding: 5px 10px;
+            color: #ff0000;
+            font-size: 13px;
+        }
+
+        /* 主体内容区布局 */
+        .main-content {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* 左侧分栏 */
+        .left-col {
+            width: 320px;
+        }
+
+        /* 右侧分栏 */
+        .right-col {
+            width: 480px;
+        }
+
+        /* 经典的老式模块盒子 */
+        .module-box {
+            border: 1px solid #aaccff;
+            margin-bottom: 15px;
+        }
+
+        .module-header {
+            background-color: #0055aa;
+            color: #ffffff;
+            font-weight: bold;
+            padding: 6px 15px;
+            font-size: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .module-header span.more {
+            font-size: 12px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .module-body {
+            padding: 15px;
+            background-color: #fafcff;
+        }
+
+        /* 新闻列表样式 */
+        .news-list {
+            list-style-type: square;
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .news-list li {
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .news-list a {
+            color: #333333;
+            text-decoration: none;
+        }
+
+        .news-list a:hover {
+            color: #ff0000;
+            text-decoration: underline;
+        }
+
+        .highlight-red {
+            color: #ff0000 !important;
+            font-weight: bold;
+        }
+
+        .highlight-blue {
+            color: #0055aa !important;
+        }
+
+        /* 赞助板块图片 */
+        .sponsor-img {
+            width: 100%;
+            border: 1px solid #cccccc;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* 名师风采缩略图 */
+        .teacher-grid {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+        }
+
+        .teacher-item {
+            width: 30%;
+        }
+
+        .teacher-item div {
+            width: 100%;
+            height: 100px;
+            background-color: #e0e0e0;
+            border: 1px solid #999;
+            margin-bottom: 5px;
+            line-height: 100px;
+            color: #666;
+            font-size: 12px;
+        }
+
+        /* --- 弹窗成绩单样式 (核心悬疑点) --- */
+        #score-modal {
+            display: none; /* 默认隐藏 */
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            z-index: 999;
+        }
+
+        .modal-content {
+            width: 600px;
+            background-color: #fff;
+            margin: 100px auto;
+            border: 2px solid #0055aa;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .modal-header {
+            background-color: #0055aa;
+            color: #fff;
+            padding: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 15px;
+            top: 8px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* 经典的Word表格样式 */
+        .score-table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .score-table th, .score-table td {
+            border: 1px solid #333;
+            padding: 8px;
+        }
+
+        .score-table th {
+            background-color: #e6f0fa;
+            font-weight: bold;
+        }
+
+        /* 异常断层分数强调 */
+        .score-gap {
+            background-color: #fff0f0;
+            color: #cc0000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>江城市实验中学</h1>
+            <p>JIANG CHENG SHI SHI YAN ZHONG XUE (SINCE 1956)</p>
+        </div>
+
+        <!-- 导航栏 -->
+        <div class="nav-bar">
+            <a href="#">学校首页</a>
+            <a href="#">学校概况</a>
+            <a href="#">机构设置</a>
+            <a href="#">教务公开</a>
+            <a href="#">德育之窗</a>
+            <a href="#">名师风采</a>
+            <a href="#">招生专栏</a>
+        </div>
+
+        <!-- 跑马灯 -->
+        <div class="marquee-box">
+            <marquee scrollamount="4">热烈欢迎万盛集团董事长万国豪先生莅临我校指导工作！感谢万盛集团为我校捐助“万盛未来之星”企业专项奖学金！</marquee>
+        </div>
+
+        <div class="main-content">
+            
+            <!-- 左侧区域：教务公开 -->
+            <div class="left-col">
+                <div class="module-box">
+                    <div class="module-header">
+                        <span>教务公开</span>
+                        <span class="more">更多>></span>
+                    </div>
+                    <div class="module-body">
+                        <ul class="news-list">
+                            <li>
+                                <img src="data:image/gif;base64,R0lGODlhCwALAIAAAP8AAAAAACH5BAAAAAAALAAAAAALAAsAAAIQhI+py+0Po5y02ouzfqwLKAQAOw==" alt="icon"> 
+                                <!-- 要求1：点击打开新标签页的处分通告 -->
+                                <a href="baosong.html" target="_blank" class="highlight-red">
+                                    [置顶] 关于取消高三二班钟夜保送资格的处分通告
+                                </a>
+                            </li>
+                            <li>
+                                <img src="data:image/gif;base64,R0lGODlhCwALAIAAAP8AAAAAACH5BAAAAAAALAAAAAALAAsAAAIQhI+py+0Po5y02ouzfqwLKAQAOw==" alt="icon"> 
+                                <!-- 要求2：点击弹出本页表格 -->
+                                <a href="javascript:void(0);" onclick="openModal()" class="highlight-blue">
+                                    2006届高三年级期末模拟考试成绩公示
+                                </a>
+                            </li>
+                            <!-- 新增要求：保送名额最终确认表 -->
+                            <li>
+                                <img src="data:image/gif;base64,R0lGODlhCwALAIAAAP8AAAAAACH5BAAAAAAALAAAAAALAAsAAAIQhI+py+0Po5y02ouzfqwLKAQAOw==" alt="icon"> 
+                                <a href="mingdan.html" target="_blank" style="font-weight: bold; color: #0055aa;">
+                                    2006届高三年级保送名额最终确认表公开
+                                </a>
+                            </li>
+                            <li>
+                                <img src="data:image/gif;base64,R0lGODlhCwALAIAAAP8AAAAAACH5BAAAAAAALAAAAAALAAsAAAIQhI+py+0Po5y02ouzfqwLKAQAOw==" alt="icon"> 
+                                <a href="#">2006年春季学期各年级教学工作计划</a>
+                            </li>
+                            <li>
+                                <img src="data:image/gif;base64,R0lGODlhCwALAIAAAP8AAAAAACH5BAAAAAAALAAAAAALAAsAAAIQhI+py+0Po5y02ouzfqwLKAQAOw==" alt="icon"> 
+                                <a href="#">关于严肃考风考纪、严厉打击作弊的通知</a>
+                            </li>
+                            <li>
+                                <img src="data:image/gif;base64,R0lGODlhCwALAIAAAP8AAAAAACH5BAAAAAAALAAAAAALAAsAAAIQhI+py+0Po5y02ouzfqwLKAQAOw==" alt="icon"> 
+                                <a href="#">高三年级百日誓师大会顺利举行</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="module-box">
+                    <div class="module-header">
+                        <span>校园公告</span>
+                    </div>
+                    <div class="module-body" style="font-size: 13px; line-height: 1.6; color: #555;">
+                        <p>高考在即，请高三年级各班主任密切关注学生心理状态。</p>
+                        <p>严禁任何教职工、学生私自复印、买卖内部模拟试卷，一经发现，严惩不贷！</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧区域：企业赞助与名师 -->
+            <div class="right-col">
+                
+                <!-- 要求3：万盛集团赞助企业奖学金签约仪式板块 -->
+                <div class="module-box">
+                    <div class="module-header">
+                        <span>万盛集团赞助企业奖学金签约仪式</span>
+                    </div>
+                    <div class="module-body">
+                        <!-- 插入你指定的图片 -->
+                        <img src="万盛集团.png" alt="签约仪式现场" class="sponsor-img">
+                        <p style="text-indent: 2em; line-height: 1.8; margin-bottom: 0;">
+                            2005年9月13日，知名慈善企业家、万盛地产集团董事长万国豪先生莅临我校。为支持我市教育事业发展，万盛集团特向我校捐赠30万元作为“专项教育赞助款”，并签订了校企合作保送生培养协议。校长代表全校师生对万董的慷慨解囊表示最诚挚的感谢！
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 经典的名师风采板块 -->
+                <div class="module-box">
+                    <div class="module-header">
+                        <span>名师风采</span>
+                        <span class="more">更多>></span>
+                    </div>
+                    <div class="module-body teacher-grid">
+                        <div class="teacher-item">
+                            <div>[教师照片]</div>
+                            <span>李建国 (数学)</span>
+                        </div>
+                        <div class="teacher-item">
+                            <div>[教师照片]</div>
+                            <span>王淑芬 (语文)</span>
+                        </div>
+                        <div class="teacher-item">
+                            <div>[教师照片]</div>
+                            <span>张明 (英语)</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 弹窗：期末考试成绩单表格 -->
+    <div id="score-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                2006届高三年级期末模拟考试总成绩单 (前10名公示)
+                <span class="close-btn" onclick="closeModal()">×</span>
+            </div>
+            
+            <table class="score-table">
+                <thead>
+                    <tr>
+                        <th width="15%">全校排名</th>
+                        <th width="30%">班级</th>
+                        <th width="30%">姓名</th>
+                        <th width="25%">总分 (满分750)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 第一名与第二名的恐怖断层 -->
+                    <tr>
+                        <td>1</td>
+                        <td>高三 (2) 班</td>
+                        <td>钟 夜</td>
+                        <td>704</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>高三 (1) 班</td>
+                        <td>夏 唯</td>
+                        <td>552</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>高三 (1) 班</td>
+                        <td>张 伟</td>
+                        <td>548</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>高三 (3) 班</td>
+                        <td>王 强</td>
+                        <td>545</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>高三 (2) 班</td>
+                        <td>刘 洋</td>
+                        <td>540</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>高三 (4) 班</td>
+                        <td>陈 静</td>
+                        <td>538</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>高三 (1) 班</td>
+                        <td>赵 敏</td>
+                        <td>532</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>高三 (2) 班</td>
+                        <td>孙 宇</td>
+                        <td>529</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>高三 (5) 班</td>
+                        <td>周 杰</td>
+                        <td>521</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>高三 (3) 班</td>
+                        <td>林 锋</td>
+                        <td>518</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="text-align: right; padding: 0 20px 20px 0; font-size: 12px; color: #666;">
+                教务处制表 <br> 2006年5月8日
+            </div>
+        </div>
+    </div>
+
+    <!-- 弹窗控制的JavaScript -->
+    <script>
+        var modal = document.getElementById("score-modal");
+
+        function openModal() {
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        // 点击窗口外部也可以关闭弹窗
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>

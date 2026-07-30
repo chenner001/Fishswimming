@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>江城热线-新闻中心-本市一高三男生坠亡</title>
+    <style>
+        /* 延续千禧年门户网站的粗糙老旧风格 */
+        body {
+            background-color: #121216; /* 压抑的深灰蓝底色 */
+            color: #c0c0c5;
+            font-family: "SimSun", "宋体", Arial, sans-serif;
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 顶部旧版门户网站红黑报头 */
+        .portal-header {
+            background-color: #800000;
+            border-bottom: 3px solid #330000;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .portal-header .logo {
+            font-family: "Hei", "黑体", sans-serif;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 0px #000;
+        }
+
+        .portal-nav {
+            background-color: #22222b;
+            border-bottom: 1px solid #3a3a4a;
+            padding: 5px 0;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .portal-nav a {
+            color: #8a99ad;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .portal-nav a:hover {
+            color: #ff3333;
+            text-decoration: underline;
+        }
+
+        /* 新闻主体大框 */
+        .news-container {
+            width: 760px;
+            margin: 25px auto;
+            background-color: #181820;
+            border: 1px solid #2d2d3a;
+            padding: 30px 40px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        /* 面包屑导航 */
+        .breadcrumb {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 20px;
+            border-bottom: 1px dashed #2d2d3a;
+            padding-bottom: 8px;
+        }
+
+        /* 新闻标题区 */
+        .news-title {
+            color: #d93333;
+            font-size: 24px;
+            font-family: "KaiTi", "楷体", serif;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .news-meta {
+            text-align: center;
+            font-size: 12px;
+            color: #555566;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #2d2d3a;
+            padding-bottom: 10px;
+        }
+
+        /* 新闻正文 */
+        .news-content {
+            line-height: 2.0;
+            letter-spacing: 0.5px;
+            text-align: justify;
+        }
+
+        .news-content p {
+            margin-bottom: 20px;
+            text-indent: 2em; 
+        }
+
+        /* 相关新闻链接栏 */
+        .related-box {
+            margin-top: 40px;
+            background-color: #13131a;
+            border: 1px solid #252533;
+            padding: 15px;
+        }
+
+        .related-box h4 {
+            margin: 0 0 10px 0;
+            color: #800000;
+            border-bottom: 1px solid #252533;
+            padding-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .related-box ul {
+            list-style: none;
+            padding-left: 5px;
+            margin: 0;
+        }
+
+        .related-box li {
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .related-box a {
+            color: #79899e;
+            text-decoration: none;
+        }
+
+        .related-box a:hover {
+            color: #d93333;
+            text-decoration: underline;
+        }
+
+        /* 评论区样式 */
+        .comment-section {
+            margin-top: 40px;
+            border-top: 2px solid #4a1a1a;
+            padding-top: 20px;
+        }
+
+        .comment-title {
+            font-size: 14px;
+            color: #d93333;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .comment-list {
+            background-color: #111116;
+            border: 1px solid #22222b;
+        }
+
+        .comment-item {
+            padding: 12px 15px;
+            border-bottom: 1px dashed #22222b;
+            font-size: 12px;
+        }
+
+        .comment-item:last-child {
+            border-bottom: none;
+        }
+
+        .comment-meta {
+            color: #555566;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .comment-user {
+            color: #8a99ad;
+            font-weight: bold;
+        }
+
+        .comment-text {
+            color: #9999a0;
+            line-height: 1.6;
+        }
+
+        /* 核心机关：隐藏的黑色方块名字 */
+        .hidden-name {
+            background-color: #000; /* 背景和文字同色，伪装成黑方块 */
+            color: #000;
+            padding: 0 4px;
+            cursor: help;
+            user-select: none;
+            transition: all 0.2s ease-in-out;
+            font-weight: bold;
+        }
+
+        /* 鼠标悬停时：背景透明，文字变血红并带发光 */
+        .hidden-name:hover {
+            background-color: transparent;
+            color: #ff0000;
+            text-shadow: 0 0 5px #ff0000;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 门户网站头部导航 -->
+    <div class="portal-header">
+        <div class="logo">江 城 热 线</div>
+    </div>
+    <div class="portal-nav">
+        新闻中心 | 地方快讯 | 校园频道 | 社区论坛 | 法制在线 </a>
+    </div>
+
+    <!-- 新闻主板 -->
+    <div class="news-container">
+        
+        <!-- 面包屑 -->
+        <div class="breadcrumb">
+            当前位置：江城热线 &gt; 新闻中心 &gt; 地方教育新闻 &gt; 正文
+        </div>
+
+        <!-- 标题 -->
+        <div class="news-title">
+            本市某重点中学一高三男生涉嫌倒卖试卷被通报后，于昨夜坠亡
+        </div>
+        
+        <!-- 发布属性 -->
+        <div class="news-meta">
+            发布时间：2006年05月13日 09:15 | 来源：江城晨报 | 编辑：刘记者
+        </div>
+
+        <!-- 正文 -->
+        <div class="news-content">
+            <p><strong>本热线讯</strong> 5月12日深夜，本市某重点中学发生一起悲剧。一名高三重点班男生钟某（男，18岁），被发现从学校后山的废弃蓄水池坠落身亡。经警方现场勘查，初步排除他杀可能。</p>
+            
+            <p>据本网记者了解，死者钟某家境贫寒，但成绩优异，原本已获得重点大学保送资格。然而就在上周，该校教务处接到匿名实名举报，称钟某利用职务之便，在校外私下有偿倒卖学校内部的高考模拟试卷。校方在获取了相关交易记录等确凿证据后，于前日正式下达了处分通告，并取消了钟某的保送资格。</p>
+            
+            <p>据钟某班主任透露，通告下发后，钟某情绪激动，曾多次试图冲进广播室寻找播报该通告的校广播站播音员夏某理论，被老师拦下。校方原本已安排心理老师对其进行疏导，但钟某于昨晚晚自习后失踪，最终酿成坠楼惨剧。</p>
+            
+            <p>目前，校方正在积极配合有关部门处理善后事宜。教育界专家提醒，高考临近，学校和家长在抓纪律的同时，更应关注考生的心理健康，避免过激行为的发生。</p>
+        </div>
+
+        <!-- 相关新闻链接 -->
+        <div class="related-box">
+            <h4>相关专题报道：</h4>
+            <ul>
+                <li>· <a href="#">市教育局下发通知：严禁各校私自印制、买卖内部模拟试卷</a> (2006-05-10)</li>
+                <li>· <a href="#">心理专家：贫困优等生的心理脆弱防线不容忽视</a> (2006-05-14)</li>
+            </ul>
+        </div>
+
+        <!-- 评论区 -->
+        <div class="comment-section">
+            <div class="comment-title">网友发表评论（共3条评论）</div>
+            <div class="comment-list">
+                
+                <!-- 评论1 -->
+                <div class="comment-item">
+                    <div class="comment-meta">
+                        <span class="comment-user">网友：教育者</span>
+                        <span>2006-05-13 10:22:05</span>
+                    </div>
+                    <div class="comment-text">
+                        成绩好不能代表道德好，为了赚一点黑心钱毁了自己一辈子，现在的高中生太浮躁了。
+                    </div>
+                </div>
+
+                <!-- 评论2 -->
+                <div class="comment-item">
+                    <div class="comment-meta">
+                        <span class="comment-user">网友：实验中学路人</span>
+                        <span>2006-05-13 11:05:42</span>
+                    </div>
+                    <div class="comment-text">
+                        听说那个举报他的播音员学姐长得很漂亮，钟某之前还纠缠过她，估计是怀恨在心吧。
+                    </div>
+                </div>
+
+                <!-- 评论3：核心悬疑点（黑方块名字） -->
+                <div class="comment-item">
+                    <div class="comment-meta">
+                        <!-- 这里使用了隐藏交互特效 -->
+                        <span class="comment-user">网友：<span class="hidden-name">钟溯</span></span>
+                        <span>2006-05-13 23:59:59</span>
+                    </div>
+                    <div class="comment-text" style="color: #c94444;">
+                        他没倒卖试卷，那个播音员是个biao子。我会让她血债血偿。
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>千度一下，你就知道</title>
+    <style>
+        /* 还原千禧年经典的宋体、小字号与纯白背景 */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            font-family: "SimSun", "宋体", Arial, sans-serif;
+            font-size: 12px;
+            color: #000000;
+            text-align: center;
+        }
+
+        /* 早期网页标志性的高纯度蓝色链接，默认没有下划线，悬停时出现 */
+        a {
+            color: #0000cc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #ff0000; /* 悬停变成红色或带下划线是早期的特色 */
+            text-decoration: underline;
+        }
+
+        /* 顶部右侧的简单链接 */
+        .top-bar {
+            text-align: right;
+            padding: 10px 20px;
+            font-size: 12px;
+        }
+
+        /* 页面主体居中容器 */
+        .main-container {
+            margin-top: 60px;
+        }
+
+        /* 伪造一个早期的 Logo 质感 */
+        .logo-area {
+            margin-bottom: 15px;
+        }
+        
+        .logo-text {
+            font-size: 56px;
+            font-family: "KaiTi", "楷体", "Times New Roman", serif;
+            font-weight: bold;
+            color: #0000cc;
+            letter-spacing: 5px;
+        }
+
+        .logo-sub {
+            font-size: 20px;
+            color: #ff0000;
+            vertical-align: top;
+            position: relative;
+            top: -15px;
+        }
+
+        /* 搜索框上方的分类导航 */
+        .search-nav {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .search-nav a {
+            margin: 0 5px;
+            color: #0000cc;
+            text-decoration: underline;
+        }
+
+        .search-nav b {
+            margin: 0 5px;
+            font-size: 14px;
+        }
+
+        /* 搜索表单区域 */
+        .search-form {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* 模仿 IE6/WinXP 时期的经典输入框 */
+        .search-input {
+            width: 380px;
+            height: 22px;
+            padding: 2px 4px;
+            font-size: 14px;
+            font-family: "SimSun", "宋体";
+            border: 1px solid #7F9DB9; /* 经典的 IE6 默认输入框边框颜色 */
+            background-color: #ffffff;
+            vertical-align: middle;
+            outline: none;
+        }
+        
+        .search-input:focus {
+            border-color: #0000cc;
+        }
+
+        /* 模仿 Win98/XP 时期的 3D 凸起按钮 */
+        .search-btn {
+            width: 80px;
+            height: 28px;
+            font-size: 14px;
+            font-family: "SimSun", "宋体";
+            color: #000000;
+            background-color: #ece9d8; /* 经典的 Windows 对话框灰底 */
+            border-top: 2px solid #ffffff;
+            border-left: 2px solid #ffffff;
+            border-bottom: 2px solid #808080;
+            border-right: 2px solid #808080;
+            cursor: default; /* 早期的按钮通常不会变小手 */
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+        
+        .search-btn:active {
+            border-top: 2px solid #808080;
+            border-left: 2px solid #808080;
+            border-bottom: 2px solid #ffffff;
+            border-right: 2px solid #ffffff;
+        }
+
+        /* 搜索框下方的辅助链接 */
+        .advanced-links {
+            margin-top: 15px;
+            font-size: 12px;
+        }
+        
+        .advanced-links a {
+            color: #0000cc;
+            margin: 0 3px;
+        }
+
+        /* 底部版权信息区域 */
+        .footer {
+            margin-top: 100px;
+            font-size: 12px;
+            color: #666666;
+            line-height: 1.8;
+        }
+
+        .footer a {
+            color: #666666;
+        }
+        
+        .footer a:hover {
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <a href="#">千度首页</a> | <a href="#">设置</a> | <a href="#">登录</a>
+    </div>
+
+    <div class="main-container">
+        
+        <!-- 千度 Logo 区域 -->
+        <div class="logo-area">
+            <span class="logo-text">千度</span><span class="logo-sub">®</span>
+        </div>
+
+        <!-- 搜索分类标签 -->
+        <div class="search-nav">
+            <a href="#">新闻</a> 
+            <b>网页</b> 
+            <a href="#">贴吧</a> 
+            <a href="#">知道</a> 
+            <a href="#">MP3</a> 
+            <a href="#">图片</a>
+        </div>
+
+        <!-- 搜索框与按钮 -->
+        <div class="search-form">
+            <!-- 加上了 id，并绑定回车键事件 -->
+            <input type="text" id="search-input" class="search-input" value="" autocomplete="off" onkeypress="if(event.keyCode==13) executeSearch()">
+            <!-- 加上了 onclick 点击事件 -->
+            <button id="search-btn" class="search-btn" onclick="executeSearch()">千度一下</button>
+        </div>
+
+        <!-- 辅助链接 -->
+        <div class="advanced-links">
+            <a href="#">把千度设为首页</a> &nbsp;
+            <a href="#">千度搜索帮助</a> &nbsp;
+            <a href="#">高级搜索</a>
+        </div>
+        
+    </div>
+
+    <!-- 底部版权与备案号 -->
+    <div class="footer">
+        <div><a href="#">加入千度</a> | <a href="#">搜索风云榜</a> | <a href="#">关于千度</a> | <a href="#">About QianDu</a></div>
+        <div>©2006 QianDu <a href="#">使用千度前必读</a> 沪ICP证030173号</div>
+        <div><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="14" height="14" alt="网警图标" style="border:1px solid #ccc; vertical-align:middle; background:#f0f0f0;"> 互联网新闻信息服务许可证0123456789号</div>
+    </div>
+
+    <!-- 1. 引用外部的 sjump.js -->
+    <script src="sjump.js"></script>
+    
+    <!-- 2. 桥接 HTML 与 JS 逻辑 -->
+    <script>
+        function executeSearch() {
+            var keyword = document.getElementById('search-input').value;
+            // 只有当输入框有内容时才执行搜索
+            if (keyword.trim() !== '') {
+                encryptedSearch(keyword);
+            }
+        }
+    </script>
+
+</body>
+</html>
