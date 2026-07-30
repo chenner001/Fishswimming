@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>2006年5月9日 - 记忆的底片</title>
+    <style>
+        /* 基础重置 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #03060a; /* 深邃冰冷的雨夜底色 */
+        }
+
+        /* 核心日记背景图：全屏覆盖 */
+        .diary-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('日记.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            
+            /* 添加冰冷、阴暗的滤镜，模拟雨夜回忆的压抑感 */
+            filter: brightness(0.65) contrast(1.15) sepia(0.2) hue-rotate(190deg);
+            z-index: 1;
+            
+            /* 极其缓慢的放大效果，增加心理压迫感 */
+            animation: slowZoom 20s linear infinite alternate;
+        }
+
+        /* 缓慢推镜头动画 */
+        @keyframes slowZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        /* 环境遮罩层：增加四周的暗角，聚焦中心 */
+        .vignette-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0,0,0,0) 20%, rgba(0,10,20,0.8) 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Canvas特效层：承载大雨和涟漪 */
+        #rain-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none; /* 让鼠标事件可以穿透 */
+        }
+        
+        /* 页面逐渐浮现的特效 */
+        body {
+            animation: fadeIn 3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ==================================================
+           新增：2006年 Windows XP 风格电量报警弹窗 UI 
+           ================================================== */
+        .xp-dialog {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 380px;
+            background-color: #ECE9D8; /* 经典的 XP 视窗灰黄色 */
+            border: 1px solid #00138C;
+            border-radius: 4px 4px 0 0;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.6);
+            font-family: Tahoma, "SimSun", sans-serif;
+            display: none; /* 初始隐藏 */
+            z-index: 1000;
+        }
+        
+        .xp-title {
+            /* 还原 XP 经典蓝色渐变标题栏 */
+            background: linear-gradient(to bottom, #0058E6 0%, #3A93FF 8%, #288EFF 40%, #127DFF 88%, #036BFF 100%);
+            color: #fff;
+            padding: 4px 6px;
+            font-size: 13px;
+            font-weight: bold;
+            text-shadow: 1px 1px 1px #0F1089;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .xp-close {
+            /* 还原 XP 经典红色关闭按钮 */
+            background: linear-gradient(to bottom, #EFA08C, #E55B47 40%, #D43924 50%, #E64C36);
+            border: 1px solid #FFF;
+            border-radius: 3px;
+            color: white;
+            font-size: 12px;
+            line-height: 14px;
+            width: 18px;
+            height: 18px;
+            text-align: center;
+            font-family: "Arial", sans-serif;
+            text-shadow: none;
+            box-shadow: inset 0 -1px 2px rgba(0,0,0,0.3);
+        }
+
+        .xp-content {
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            font-size: 12px;
+            color: #000;
+            line-height: 1.6;
+        }
+
+        .xp-icon {
+            font-size: 32px;
+            margin-right: 15px;
+            line-height: 1;
+            /* 纯 CSS 伪造警告黄三角图标 */
+            text-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+        }
+
+        /* ==================================================
+           新增：断电黑屏与闪烁特效 
+           ================================================== */
+        #black-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 9999;
+            display: none; /* 初始隐藏 */
+        }
+
+        /* 模拟老旧笔记本断电时的电压不稳频闪 */
+        .power-off-anim {
+            display: block !important;
+            animation: flicker 0.35s ease-in-out forwards;
+        }
+
+        @keyframes flicker {
+            0%   { opacity: 0; }
+            15%  { opacity: 1; }
+            30%  { opacity: 0.1; }
+            50%  { opacity: 1; }
+            70%  { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 日记图片背景 -->
+    <div class="diary-bg"></div>
+    
+    <!-- 压抑的暗角遮罩 -->
+    <div class="vignette-overlay"></div>
+    
+    <!-- 暴雨与涟漪画布 -->
+    <canvas id="rain-canvas"></canvas>
+
+    <!-- 【新增】XP风格 电量不足弹窗 -->
+    <div id="battery-warning" class="xp-dialog">
+        <div class="xp-title">
+            <span>电源表</span>
+            <div class="xp-close">×</div>
+        </div>
+        <div class="xp-content">
+            <div class="xp-icon">⚠️</div>
+            <div>
+                <strong style="font-size: 13px;">电池电量严重不足</strong><br><br>
+                电池电量已降低至 1%。为防止数据丢失，系统即将强制关机……<br><br>
+                请立即连接电源。
+            </div>
+        </div>
+    </div>
+
+    <!-- 【新增】断电黑屏覆盖层 -->
+    <div id="black-screen"></div>
+
+    <script>
+        // ==========================================
+        // 核心流程控制：10秒弹窗 -> 13秒断电 -> 16秒跳转
+        // ==========================================
+        window.onload = function() {
+            // 1. 10秒后：弹出 XP 电量警告
+            setTimeout(function() {
+                document.getElementById('battery-warning').style.display = 'block';
+                
+                // 2. 弹窗出现 3 秒后：触发屏幕闪烁并彻底黑屏（断电）
+                setTimeout(function() {
+                    var blackScreen = document.getElementById('black-screen');
+                    blackScreen.classList.add('power-off-anim');
+                    
+                    // (可选) 停止下雨的画布渲染，节省性能
+                    cancelAnimationFrame(animationFrameId);
+
+                    // 3. 黑屏保持 3 秒后：跳转到 open.html (重启界面)
+                    setTimeout(function() {
+                        window.location.href = 'open.html';
+                    }, 3000);
+
+                }, 3000);
+
+            }, 20000);
+        };
+
+        // ==========================================
+        // 原有下雨特效代码 (未作修改，仅补充 animationFrameId 用于暂停)
+        // ==========================================
+        const canvas = document.getElementById('rain-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        let animationFrameId; // 记录动画帧ID，用于断电时停止
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        // 存储雨滴和涟漪的数组
+        const drops = [];
+        const ripples = [];
+
+        // --- 雨滴类 ---
+        class Drop {
+            constructor() {
+                this.init();
+                this.y = Math.random() * height; 
+            }
+
+            init() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * -height; 
+                this.length = Math.random() * 25 + 15; 
+                this.velocity = Math.random() * 15 + 20; 
+                this.thickness = Math.random() * 1.5 + 0.5; 
+                this.opacity = Math.random() * 0.3 + 0.1; 
+            }
+
+            update() {
+                this.y += this.velocity;
+                this.x += 1; 
+
+                if (this.y > height) {
+                    this.init();
+                    this.y = -20; 
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x + 1, this.y + this.length); 
+                ctx.strokeStyle = `rgba(200, 220, 255, ${this.opacity})`;
+                ctx.lineWidth = this.thickness;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+        }
+
+        // --- 屏幕涟漪类 ---
+        class Ripple {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.radius = Math.random() * 2 + 1; 
+                this.maxRadius = Math.random() * 35 + 25; 
+                this.speed = Math.random() * 1.5 + 0.5; 
+                this.opacity = Math.random() * 0.5 + 0.3; 
+                this.thickness = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.radius += this.speed;
+                this.opacity -= 0.015; 
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(180, 210, 255, ${this.opacity})`;
+                ctx.lineWidth = this.thickness;
+                ctx.stroke();
+            }
+        }
+
+        for (let i = 0; i < 200; i++) {
+            drops.push(new Drop());
+        }
+
+        // --- 动画主循环 ---
+        function render() {
+            ctx.clearRect(0, 0, width, height);
+
+            if (Math.random() < 0.4) {
+                ripples.push(new Ripple());
+            }
+
+            drops.forEach(drop => {
+                drop.update();
+                drop.draw();
+            });
+
+            for (let i = ripples.length - 1; i >= 0; i--) {
+                const r = ripples[i];
+                r.update();
+                r.draw();
+                
+                if (r.opacity <= 0) {
+                    ripples.splice(i, 1);
+                }
+            }
+
+            animationFrameId = requestAnimationFrame(render);
+        }
+
+        render();
+    </script>
+</body>
+</html>
