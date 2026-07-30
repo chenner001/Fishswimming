@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>江城第一人民医院 - 千度搜索</title>
+    <style>
+        /* 基础重置与千禧年 Tahoma/宋体 字体风格 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, "SimSun", "宋体", sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            font-size: 13px;
+            color: #000;
+        }
+
+        /* 顶部千度搜索 Header 区域 */
+        .qiandu-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e5e5e5;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* 经典的千度 Logo 样式 */
+        .qiandu-logo {
+            font-family: "Microsoft YaHei", sans-serif;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+        .qiandu-logo .blue { color: #0022d1; }
+        .qiandu-logo .red { color: #ae0000; }
+
+        /* 搜索框与按钮组合 */
+        .search-form {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #search-input {
+            width: 420px;
+            height: 30px;
+            padding: 0 8px;
+            font-size: 14px;
+            border: 1px solid #7f9db9;
+            outline: none;
+        }
+
+        .search-btn {
+            height: 30px;
+            padding: 0 15px;
+            background: linear-gradient(to bottom, #f2f2f2, #e1e1e1);
+            border: 1px solid #707070;
+            font-size: 13px;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .search-btn:hover {
+            background: #e5e5e5;
+        }
+
+        /* 搜索统计信息栏 */
+        .result-info {
+            padding: 8px 20px;
+            background-color: #f0f4fb;
+            color: #666;
+            font-size: 12px;
+            border-bottom: 1px solid #d9e2f3;
+        }
+
+        /* 搜索结果列表容器 */
+        .results-container {
+            padding: 20px;
+            max-width: 750px;
+        }
+
+        /* 单条搜索结果卡片 */
+        .result-item {
+            margin-bottom: 25px;
+        }
+
+        /* 经典蓝字标题 */
+        .result-title {
+            font-size: 16px;
+            color: #0000cc;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-bottom: 4px;
+            display: inline-block;
+        }
+
+        .result-title:hover {
+            color: #cc0000;
+        }
+
+        /* 摘要文字 */
+        .result-snippet {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .highlight {
+            color: #cc0000;
+            font-weight: bold;
+        }
+
+        /* 经典绿字网址与快照 */
+        .result-url {
+            font-size: 12px;
+            color: #008000;
+        }
+
+        .result-cache {
+            color: #6666cc;
+            text-decoration: underline;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        /* 页脚 */
+        .footer {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+            color: #77c;
+            font-size: 12px;
+            border-top: 1px solid #e5e5e5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部千度搜索栏 -->
+    <div class="qiandu-header">
+        <a href="#" class="qiandu-logo">
+            <span class="blue">千</span><span class="red">度</span>
+        </a>
+        <div class="search-form">
+            <!-- 预填搜索词 "江城第一人民医院" -->
+            <input type="text" id="search-input" value="江城第一人民医院" placeholder="输入搜索关键词...">
+            <button class="search-btn" id="search-btn" onclick="executeSearch()">千度一下</button>
+        </div>
+    </div>
+
+    <!-- 搜索结果统计 -->
+    <div class="result-info">
+        千度为您找到相关结果约 4,120,000 个，用时 0.002 秒
+    </div>
+
+    <!-- 搜索结果列表 -->
+    <div class="results-container">
+
+        <!-- 结果 1：医院官方网站 (目标链接) -->
+        <div class="result-item">
+            <a href="hospital.html" target="_blank" class="result-title">
+                <span class="highlight">江城市第一人民医院</span> - 官方网站
+            </a>
+            <div class="result-snippet">
+                <span class="highlight">江城市第一人民医院</span>是一所集医疗、教学、科研、预防保健为一体的大型综合性三甲医院。全院秉承“大医精诚，救死扶伤”的宗旨，拥有先进的医疗设备与顶尖的专家团队，竭诚为广大市民提供优质的医疗服务……
+            </div>
+            <div class="result-url">
+                www.jc1h.com.cn/ 
+                <span class="result-cache">千度快照</span>
+            </div>
+        </div>
+
+        <!-- 结果 2：卫生局表彰通知 (正面伪装) -->
+        <div class="result-item">
+            <a href="javascript:alert('该网页已被移至历史归档区。');" class="result-title">
+                【市卫生局】关于表彰<span class="highlight">江城第一人民医院</span>为年度医疗工作先进集体的决定
+            </a>
+            <div class="result-snippet">
+                在去年的医疗服务与公共卫生突发事件处理中，<span class="highlight">江城第一人民医院</span>全体医护人员坚守岗位、无私奉献，展现了高尚的医德医风。经市卫生局研究决定，授予该院“年度医疗工作先进集体”荣誉称号，予以通报表彰……
+            </div>
+            <div class="result-url">
+                www.jiangcheng-health.gov.cn/notice/2006-02/105.htm 
+                <span class="result-cache">千度快照</span>
+            </div>
+        </div>
+
+        <!-- 结果 3：学术新闻 (正面伪装) -->
+        <div class="result-item">
+            <a href="javascript:alert('对不起，服务器忙，请稍后再试。');" class="result-title">
+                【江城健康报】<span class="highlight">江城第一人民医院</span>成功举办首届血液病及肿瘤学术论坛
+            </a>
+            <div class="result-snippet">
+                昨日，由<span class="highlight">江城第一人民医院</span>承办的首届血液病与肿瘤疑难杂症医学高峰论坛在市会议中心隆重开幕。多位国内知名医学专家受邀出席，高度赞扬了该院在白血病等重大疾病科研攻关上取得的突破性进展……
+            </div>
+            <div class="result-url">
+                www.jc-healthnews.com.cn/news/20060420.html 
+                <span class="result-cache">千度快照</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 页面底部 -->
+    <div class="footer">
+        千度搜索  千度一下，你就知道  ©2006 Qiandu
+    </div>
+
+    <!-- 引用 sjump.js 搜索逻辑组件 -->
+    <script src="sjump.js"></script>
+
+</body>
+</html>

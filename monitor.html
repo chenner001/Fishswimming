@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>实验中学 - 网络安防监控视频调阅系统 v2.1</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #121417;
+            font-family: "Microsoft YaHei", "SimSun", sans-serif;
+            color: #ccc;
+            overflow: hidden;
+        }
+
+        /* 顶部系统状态栏 */
+        .system-header {
+            height: 40px;
+            background-color: #1a1d22;
+            border-bottom: 2px solid #2a2f38;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            font-size: 13px;
+        }
+
+        .status-tag {
+            color: #00ff66;
+            font-family: monospace;
+        }
+
+        /* 主工作区布局 */
+        .workspace {
+            display: flex;
+            height: calc(100% - 42px);
+        }
+
+        /* 左侧控制面板 */
+        .control-panel {
+            width: 320px;
+            background-color: #181b20;
+            border-right: 2px solid #2a2f38;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            border-left: 3px solid #00ff66;
+            padding-left: 8px;
+            margin-bottom: 20px;
+        }
+
+        .form-item {
+            margin-bottom: 18px;
+        }
+
+        .form-item label {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            background-color: #0b0c0e;
+            border: 1px solid #3a404d;
+            color: #fff;
+            padding: 8px;
+            font-size: 13px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: #00ff66;
+        }
+
+        .btn-play {
+            width: 100%;
+            background-color: #215235;
+            color: #00ff66;
+            border: 1px solid #00ff66;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .btn-play:hover {
+            background-color: #00ff66;
+            color: #000;
+        }
+
+        /* 右侧监控画幅区 */
+        .monitor-panel {
+            flex: 1;
+            background-color: #050608;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* CCTV 播放器外框 */
+        .cctv-screen {
+            width: 800px;
+            height: 600px;
+            background-color: #000;
+            border: 3px solid #2a2f38;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        /* 模拟 CRT 扫描线，盖在图片最上层增加质感 */
+        .scanline {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* 默认空画面 */
+        #screen-empty {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-family: monospace;
+        }
+
+        /* 图片背景层（直接调用你提供的图片） */
+        #screen-video {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background-image: url('雨夜.png');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        /* ================= 画面扭曲闪烁特效 ================= */
+        .glitch-active {
+            animation: glitch-anim 0.15s infinite !important;
+        }
+
+        @keyframes glitch-anim {
+            0% { filter: hue-rotate(0deg) invert(0); transform: skewX(0deg) scale(1); }
+            20% { filter: hue-rotate(90deg) invert(1); transform: skewX(-8deg) scale(1.05) translate(-5px, 5px); }
+            40% { filter: hue-rotate(0deg) invert(0); transform: skewX(10deg) scale(0.95) translate(5px, -5px); }
+            60% { filter: hue-rotate(180deg) invert(1); transform: skewX(-15deg) scale(1.1) translate(-10px, 10px); }
+            80% { filter: hue-rotate(0deg) invert(0); transform: skewX(5deg) scale(1) translate(5px, -2px); }
+            100% { filter: hue-rotate(90deg) invert(1); transform: skewX(0deg) scale(1.02); }
+        }
+
+        /* 觉醒字幕提示 */
+        #awakening-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 26px;
+            font-weight: bold;
+            text-align: center;
+            z-index: 100;
+            display: none;
+            text-shadow: 0 0 15px #ff0000, 0 0 5px #000;
+            line-height: 2;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部栏 -->
+    <div class="system-header">
+        <div>江城市实验中学 - 校园网络安防监控中心 (主机: MAIN-SERVER-02)</div>
+        <div>系统状态: <span class="status-tag">● 在线 (磁带离线挂载模式)</span></div>
+    </div>
+
+    <div class="workspace">
+        
+        <!-- 控制面板 -->
+        <div class="control-panel">
+            <div class="panel-title">历史监控调阅设置</div>
+
+            <div class="form-item">
+                <label>监控区域 (Camera Zone)</label>
+                <select class="form-control">
+                    <option>CAM-07 教务处一楼大厅主入口</option>
+                    <option>CAM-02 实验楼后门黑水池方向</option>
+                    <option>CAM-03 高三年级广播站廊道</option>
+                </select>
+            </div>
+
+            <div class="form-item">
+                <label>调阅日期 (Date)</label>
+                <!-- 默认选在现代，迫使玩家手动选择 -->
+                <input type="date" id="input-date" class="form-control" value="2026-07-29">
+            </div>
+
+            <div class="form-item">
+                <label>调阅时间 (Time Frame)</label>
+                <input type="time" class="form-control" value="21:14">
+            </div>
+
+            <button class="btn-play" id="btn-play" onclick="checkAndPlay()">读取监控数据</button>
+
+            <div id="sys-log" style="margin-top: 20px; font-size: 11px; color: #666; font-family: monospace; line-height: 1.6;">
+                > 离线磁带索引加载完毕...<br>
+                > 请输入指定日期调阅调档。
+            </div>
+        </div>
+
+        <!-- 右侧监控画幅 -->
+        <div class="monitor-panel">
+            
+            <div class="cctv-screen" id="cctv-container">
+                <div class="scanline"></div>
+
+                <!-- 默认空画面/无信号 -->
+                <div id="screen-empty">
+                    <div style="font-size: 24px; margin-bottom: 10px;">[ NO DATA STREAM ]</div>
+                    <div>当前选择的日期无有效录像备份或已被覆盖</div>
+                </div>
+
+                <!-- 正确日期触发的监控画面 (背景为你的图片) -->
+                <div id="screen-video"></div>
+
+                <!-- 觉醒字幕 -->
+                <div id="awakening-text">
+                    “黄色的小雨衣……”<br>
+                    “大白兔奶糖……”<br>
+                    <span style="color: #ff3333;">“那不是姐姐……那是我！！”</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        function checkAndPlay() {
+            var dateVal = document.getElementById('input-date').value;
+            var log = document.getElementById('sys-log');
+            var screenEmpty = document.getElementById('screen-empty');
+            var screenVideo = document.getElementById('screen-video');
+            var btnPlay = document.getElementById('btn-play');
+
+            if (dateVal === '2006-05-09') {
+                log.innerHTML += "<br><span style='color:#00ff66;'>[成功] 匹配到 2006-05-09 保安室底层离线镜像文件！</span>";
+                log.innerHTML += "<br>> 正在加载磁带缓存...";
+                
+                // 禁用按钮防止重复点击
+                btnPlay.disabled = true;
+                btnPlay.innerText = "正在播放...";
+                btnPlay.style.backgroundColor = "#555";
+                btnPlay.style.color = "#aaa";
+                btnPlay.style.borderColor = "#555";
+
+                // 显示雨夜图片
+                screenEmpty.style.display = 'none';
+                screenVideo.style.display = 'block';
+
+                // ==========================================
+                // 核心逻辑：5秒后扭曲闪烁，随后跳转
+                // ==========================================
+                setTimeout(function() {
+                    var container = document.getElementById('cctv-container');
+                    
+                    // 1. 触发 CSS 扭曲闪烁动画
+                    container.classList.add('glitch-active');
+                    
+                    // 2. 显示红色的觉醒文本
+                    document.getElementById('awakening-text').style.display = 'block';
+                    
+                    // 3. 伴随剧烈闪烁，等待 3.5 秒后跳转到 riji.html
+                    setTimeout(function() {
+                        window.location.href = 'riji.html';
+                    }, 3500);
+
+                }, 5000); // 5000 毫秒 = 5秒
+
+            } else {
+                log.innerHTML += "<br><span style='color:#ff3333;'>[错误] 未查找到该日期的磁带备份。</span>";
+                screenEmpty.style.display = 'flex';
+                screenVideo.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

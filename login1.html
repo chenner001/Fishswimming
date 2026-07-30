@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <title>Windows XP - 登录</title>
+    <style>
+        /* 基础重置与字体设置 (还原千禧年 Tahoma 字体风格) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Tahoma, "Microsoft YaHei", Arial, sans-serif;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            /* 背景图设置为 牢笼.png */
+            background: #5a7edc url('牢笼.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* 顶部和底部的深蓝色经典XP状态栏 */
+        .xp-top-bar, .xp-bottom-bar {
+            position: absolute;
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(to bottom, #003399 0%, #0055d4 100%);
+            border-bottom: 2px solid #ff9900;
+            z-index: 10;
+        }
+
+        .xp-bottom-bar {
+            bottom: 0;
+            top: auto;
+            border-bottom: none;
+            border-top: 2px solid #ff9900;
+        }
+
+        /* 登录界面的中央容器，模仿XP的分栏排版 */
+        .login-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 800px;
+            height: 400px;
+            background: rgba(90, 126, 220, 0.4); 
+            border-radius: 10px;
+            backdrop-filter: blur(2px);
+        }
+
+        /* 居中的分割线 */
+        .divider {
+            width: 2px;
+            height: 250px;
+            background: linear-gradient(to bottom, transparent, #ffffff, transparent);
+            margin: 0 50px;
+        }
+
+        /* 左侧：Windows XP 经典Logo占位或欢迎语 */
+        .left-panel {
+            text-align: right;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        .left-panel h1 {
+            font-size: 36px;
+            font-weight: normal;
+            font-style: italic;
+        }
+
+        /* 右侧：用户登录交互区 */
+        .right-panel {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        /* 经典XP头像框 */
+        .avatar-frame {
+            width: 65px;
+            height: 65px;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            background-color: #ccc;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+            background-image: linear-gradient(45deg, #ddd, #fff);
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .username {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* 密码输入框（改用文本框+掩码模拟，以支持中文输入法） */
+        .pwd-input-fake {
+            width: 180px;
+            height: 28px;
+            padding: 0 5px;
+            font-size: 14px;
+            border: 2px solid #99b4d1;
+            border-radius: 3px;
+            outline: none;
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.2);
+            /* 核心黑科技：允许输入法输入中文，但强制显示为黑圆点密码形态 */
+            -webkit-text-security: disc;
+        }
+
+        .pwd-input-fake:focus {
+            border-color: #0055d4;
+        }
+
+        /* 经典的绿色箭头提交按钮 */
+        .submit-btn {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(to bottom, #4cb849, #388e35);
+            border: 1px solid #fff;
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(to bottom, #56c953, #3f9c3c);
+        }
+
+        .submit-btn:active {
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        /* 密保提示文字 */
+        .hint {
+            margin-top: 10px;
+            color: #d1e4ff;
+            font-size: 13px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        /* 错误提示文字 */
+        .error-msg {
+            margin-top: 5px;
+            color: #ff6b6b;
+            font-size: 13px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            visibility: hidden; /* 默认隐藏 */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="xp-top-bar"></div>
+
+    <div class="login-container">
+        <div class="left-panel">
+            <h1>Windows XP</h1>
+            <p>要开始，请输入您的密码</p>
+        </div>
+        
+        <div class="divider"></div>
+
+        <div class="right-panel">
+            <div class="avatar-frame"></div>
+            <div class="login-form">
+                <div class="username">Anael</div>
+                <div class="input-group">
+                    <!-- 放宽 maxlength 到 7，允许玩家完整输入 laolong -->
+                    <input type="text" id="pwd-input" class="pwd-input-fake" placeholder="输入密码" autocomplete="off" maxlength="7">
+                    <button class="submit-btn" onclick="verifyLogin()">➔</button>
+                </div>
+                <!-- 密保提示修改 -->
+                <div class="hint">密保提示：小伊小伊快快游，四面八方皆__。</div>
+                <div class="error-msg" id="error-text">密码不正确。请键入您的密码。</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="xp-bottom-bar"></div>
+
+    <script>
+        // 
+        const VALID_PWDS = [
+            "JUU3JTg5JUEyJUU3JUFDJUJD", // 
+            "bGFvbG9uZw=="              // 
+        ];
+        
+        // 
+        const ENCRYPTED_URL = "ZGVza3RvcDEuaHRtbA==";
+
+        function verifyLogin() {
+            // 
+            const input = document.getElementById("pwd-input").value.trim().toLowerCase();
+            const errorText = document.getElementById("error-text");
+
+            if (!input) {
+                errorText.style.visibility = "visible";
+                return;
+            }
+
+            try {
+                // 
+                const encodedInput = btoa(encodeURIComponent(input));
+                
+                // 
+                if (VALID_PWDS.includes(encodedInput)) {
+                    const targetUrl = atob(ENCRYPTED_URL);
+                    window.location.href = targetUrl;
+                } else {
+                    errorText.style.visibility = "visible";
+                    document.getElementById("pwd-input").value = ""; 
+                    document.getElementById("pwd-input").focus();    
+                }
+            } catch (e) {
+                errorText.style.visibility = "visible";
+            }
+        }
+
+        document.getElementById("pwd-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); 
+                verifyLogin();
+            }
+        });
+
+        document.getElementById("pwd-input").addEventListener("input", function() {
+            document.getElementById("error-text").style.visibility = "hidden";
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>林娜 - 新浪博客</title>
+    <style>
+        /* 还原 2006 年博客经典的固定宽度、宋体、灰色虚线风格 */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #e3effa; /* 经典的博客浅蓝色背景 */
+            font-family: "SimSun", "宋体", Arial, sans-serif;
+            font-size: 12px;
+            color: #333333;
+        }
+
+        a {
+            color: #004499;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #ff0000;
+            text-decoration: underline;
+        }
+
+        /* 顶部黑色的“新浪通行证”导航条 */
+        .top-nav {
+            background-color: #333333;
+            color: #ffffff;
+            height: 28px;
+            line-height: 28px;
+            padding: 0 20px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .top-nav a { color: #cccccc; margin: 0 5px; }
+        .top-nav a:hover { color: #ffffff; }
+
+        /* 博客主容器 */
+        .blog-container {
+            width: 800px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* 博客头图 (Banner) */
+        .blog-header {
+            height: 180px;
+            background: linear-gradient(to bottom, #7db9e8 0%, #d4e8f9 100%);
+            border-bottom: 2px solid #5fa6d6;
+            padding: 30px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .blog-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #003366;
+            font-family: "Hei", "黑体";
+            margin: 0 0 10px 0;
+            text-shadow: 1px 1px 2px #ffffff;
+        }
+
+        .blog-subtitle {
+            font-size: 14px;
+            color: #336699;
+        }
+
+        .blog-url {
+            position: absolute;
+            bottom: 10px;
+            left: 30px;
+            color: #555555;
+            font-family: Arial;
+        }
+
+        /* 主体布局：左侧信息，右侧文章 */
+        .blog-body {
+            display: flex;
+        }
+
+        /* 左侧边栏 */
+        .sidebar {
+            width: 220px;
+            padding: 15px;
+            border-right: 1px dotted #cccccc;
+            background-color: #fcfcfc;
+        }
+
+        .side-module {
+            border: 1px solid #e0e0e0;
+            margin-bottom: 15px;
+            background-color: #ffffff;
+        }
+
+        .side-title {
+            background-color: #f2f7fb;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 5px 10px;
+            font-weight: bold;
+            color: #004499;
+        }
+
+        .side-content {
+            padding: 10px;
+            line-height: 1.8;
+            color: #555555;
+        }
+
+        .avatar-box {
+            text-align: center;
+        }
+
+        .avatar-box img {
+            width: 100px;
+            height: 100px;
+            border: 3px solid #eeeeee;
+            padding: 2px;
+            margin-bottom: 10px;
+            background: #fff;
+        }
+
+        /* 老式日历组件 */
+        .calendar {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        .calendar th { background: #f2f7fb; font-weight: normal; color: #666; padding: 2px; }
+        .calendar td { padding: 4px; color: #999; }
+        .calendar .active { font-weight: bold; color: #ff0000; text-decoration: underline; }
+
+        /* 右侧文章区 */
+        .main-content {
+            flex: 1;
+            padding: 20px 30px;
+        }
+
+        /* 单篇文章样式 */
+        .post-item {
+            margin-bottom: 40px;
+        }
+
+        .post-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 5px;
+            font-family: "Hei", "黑体";
+        }
+
+        .post-date {
+            font-size: 12px;
+            color: #999999;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #dddddd;
+            padding-bottom: 10px;
+        }
+
+        .post-text {
+            font-size: 14px;
+            line-height: 2.0;
+            color: #333333;
+        }
+
+        .post-text p {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        /* 图片相框样式（经典博客配图边框） */
+        .post-img {
+            max-width: 90%;
+            border: 1px solid #cccccc;
+            padding: 4px;
+            background-color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .post-tags {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #888888;
+        }
+
+        .post-actions {
+            margin-top: 10px;
+            text-align: right;
+            font-size: 12px;
+        }
+
+        /* 底部版权 */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #888888;
+            border-top: 1px solid #cccccc;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶栏 -->
+    <div class="top-nav">
+        <div>新浪首页 | 博客首页 | 找朋友 | 圈子</div>
+        <div>欢迎您，访客 | <a href="#">登录</a> | <a href="#">注册通行证</a></div>
+    </div>
+
+    <div class="blog-container">
+        
+        <!-- 博客头图 -->
+        <div class="blog-header">
+            <h1 class="blog-title">林娜的博客</h1>
+            <div class="blog-subtitle">工作是老板的，生活是自己的。万盛打工人的日常。</div>
+            <div class="blog-url">http://blog.sina.com.cn/linna_ws1982</div>
+        </div>
+
+        <div class="blog-body">
+            
+            <!-- 左侧边栏 -->
+            <div class="sidebar">
+                <div class="side-module">
+                    <div class="side-title">个人档案</div>
+                    <div class="side-content avatar-box">
+                        <!-- 假头像占位 -->
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP88B8AAuUB8e2ssCcAAAAASUVORK5CYII=" alt="头像" style="background: #e0e0e0;">
+                        <div>
+                            <strong>博主：</strong>林娜 (Linna)<br>
+                            <strong>等级：</strong>Lv.4<br>
+                            <strong>职业：</strong>万盛集团 董事长秘书<br>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="side-module">
+                    <div class="side-title">2006年 5月</div>
+                    <div class="side-content">
+                        <table class="calendar">
+                            <tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr>
+                            <tr><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+                            <tr><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td></tr>
+                            <tr><td>14</td><td >15</td><td>16</td><td>17</td><td>18</td><td>19</td><td >20</td></tr>
+                            <tr><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td></tr>
+                            <tr><td>28</td><td>29</td><td>30</td><td>31</td><td></td><td></td><td></td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="side-module">
+                    <div class="side-title">音乐播放器</div>
+                    <div class="side-content">
+                        <div style="background:#eee; border:1px inset #ccc; padding:5px; text-align:center; font-size:11px; color:#555;">
+                            ▶ 正在播放: 隐形的翅膀<br>
+                            -----⚪---------- 01:23
+                        </div>
+                    </div>
+                </div>
+
+                <div class="side-module">
+                    <div class="side-title">博客统计</div>
+                    <div class="side-content" style="font-family: Arial;">
+                        访问：3,102<br>
+                        文章：45<br>
+                        评论：12<br>
+                        建站：2004-10-12
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧文章列表 -->
+            <div class="main-content">
+                
+                <!-- 帖子 2：关于密码的提示 -->
+                <div class="post-item">
+                    <div class="post-title">备忘一下，真的老了</div>
+                    <div class="post-date">2006-05-20 14:32:05 | 分类：工作日志 | 阅读：(12) | 评论：(0)</div>
+                    <div class="post-text">
+                        <p>最近这几天跟着老板连轴转，晚上还要去应酬，熬夜太多，记性越来越差了。</p>
+                        <p>集团OA内网办公系统的密码我是真的老记不住，每次输错还要给IT部那群呆子打电话解锁，烦死了。干脆把密码直接放在这里，反正我的博客也没人看，就算有人看到也不会有人看得懂的！哼！</p>
+                        
+                        <!-- 插入密码图片 -->
+                        <img src="密码.png" alt="密码提示图" class="post-img">
+                        
+                    </div>
+                    <div class="post-tags">标签：工作</div>
+                    <div class="post-actions">
+                        <a href="#">阅读全文</a> | <a href="#">评论</a> | <a href="#">收藏</a>
+                    </div>
+                </div>
+
+                <!-- 帖子 1：关于酒店送钱和狗狗的抱怨 -->
+                <div class="post-item">
+                    <div class="post-title">烦死了，又去当跑腿的！</div>
+                    <div class="post-date">2006-05-15 22:10:45 | 分类：碎碎念 | 阅读：(28) | 评论：(2)</div>
+                    <div class="post-text">
+                        <p>老板又让我去万豪酒店送现金，那个女高中生真不要脸。表面上看着清清纯纯、柔柔弱弱的，背地里什么事干不出来？为了钱和保送名额，真是什么都能出卖。</p>
+                        <p>唉，算了，不说了，拿人钱财替人消灾。我就是个苦逼的小秘书，老板让我干嘛我就得干嘛。这破班真的是上够了！</p>
+                        <p>今天唯一开心的事情，就是加完班回家看到我家布丁。布丁真可爱 在栅栏里也老老实实的~ 给你买大骨头吃！</p>
+                        
+                        <!-- 插入金毛图片 -->
+                        <img src="金毛.png" alt="可爱的金毛布丁" class="post-img">
+                        
+                    </div>
+                    <div class="post-tags">标签：金毛</div>
+                    <div class="post-actions">
+                        <a href="#">阅读全文</a> | <a href="#">评论 (2)</a> | <a href="#">收藏</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 底部 -->
+        <div class="footer">
+            新浪 BLOG 意见反馈留言板<br>
+            Copyright © 1996 - 2006 SINA Corporation, All Rights Reserved
+        </div>
+
+    </div>
+
+</body>
+</html>

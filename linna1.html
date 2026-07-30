@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>林娜 - 千度搜索</title>
+    <style>
+        /* 基础重置与千禧年 Tahoma/宋体 字体风格 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, "SimSun", "宋体", sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            font-size: 13px;
+            color: #000;
+        }
+
+        /* 顶部千度搜索 Header 区域 */
+        .qiandu-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e5e5e5;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* 经典的千度 Logo 样式 */
+        .qiandu-logo {
+            font-family: "Microsoft YaHei", sans-serif;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+        .qiandu-logo .blue { color: #0022d1; }
+        .qiandu-logo .red { color: #ae0000; }
+
+        /* 搜索框与按钮组合 */
+        .search-form {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #search-input {
+            width: 420px;
+            height: 30px;
+            padding: 0 8px;
+            font-size: 14px;
+            border: 1px solid #7f9db9;
+            outline: none;
+        }
+
+        .search-btn {
+            height: 30px;
+            padding: 0 15px;
+            background: linear-gradient(to bottom, #f2f2f2, #e1e1e1);
+            border: 1px solid #707070;
+            font-size: 13px;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .search-btn:hover {
+            background: #e5e5e5;
+        }
+
+        /* 搜索统计信息栏 */
+        .result-info {
+            padding: 8px 20px;
+            background-color: #f0f4fb;
+            color: #666;
+            font-size: 12px;
+            border-bottom: 1px solid #d9e2f3;
+        }
+
+        /* 搜索结果列表容器 */
+        .results-container {
+            padding: 20px;
+            max-width: 750px;
+        }
+
+        /* 单条搜索结果卡片 */
+        .result-item {
+            margin-bottom: 25px;
+        }
+
+        /* 经典蓝字标题 */
+        .result-title {
+            font-size: 16px;
+            color: #0000cc;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-bottom: 4px;
+            display: inline-block;
+        }
+
+        .result-title:hover {
+            color: #cc0000;
+        }
+
+        /* 摘要文字 */
+        .result-snippet {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .highlight {
+            color: #cc0000;
+            font-weight: bold;
+        }
+
+        /* 经典绿字网址与快照 */
+        .result-url {
+            font-size: 12px;
+            color: #008000;
+        }
+
+        .result-cache {
+            color: #6666cc;
+            text-decoration: underline;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        /* 页脚 */
+        .footer {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+            color: #77c;
+            font-size: 12px;
+            border-top: 1px solid #e5e5e5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部千度搜索栏 -->
+    <div class="qiandu-header">
+        <a href="#" class="qiandu-logo">
+            <span class="blue">千</span><span class="red">度</span>
+        </a>
+        <div class="search-form">
+            <!-- 预填搜索词 "林娜" -->
+            <input type="text" id="search-input" value="林娜" placeholder="输入搜索关键词...">
+            <button class="search-btn" id="search-btn" onclick="executeSearch()">千度一下</button>
+        </div>
+    </div>
+
+    <!-- 搜索结果统计 -->
+    <div class="result-info">
+        千度为您找到相关结果约 870,000 个，用时 0.001 秒
+    </div>
+
+    <!-- 搜索结果列表 -->
+    <div class="results-container">
+
+        <!-- 结果 1：林娜的私人博客 (目标链接) -->
+        <div class="result-item">
+            <a href="linna.html" target="_blank" class="result-title">
+                <span class="highlight">林娜</span>的私人博客 - 新浪博客
+            </a>
+            <div class="result-snippet">
+                新浪博客 - <span class="highlight">林娜</span>的个人空间。
+            </div>
+            <div class="result-url">
+                blog.sina.com.cn/u/linna_wsgroup 
+                <span class="result-cache">千度快照</span>
+            </div>
+        </div>
+
+        <!-- 结果 2：企业新闻 (强调其秘书身份) -->
+        <div class="result-item">
+            <a href="javascript:alert('该页面已归档，无法查看。');" class="result-title">
+                万盛集团董事长万国豪视察江城新项目，董事长秘书<span class="highlight">林娜</span>陪同
+            </a>
+            <div class="result-snippet">
+                【企业动态】昨日，万盛地产董事长万国豪先生莅临江城商业广场项目现场进行视察。集团高管及董事长秘书<span class="highlight">林娜</span>等陪同考察。万总强调，要坚定不移地推进江城地区的开发，绝不允许任何阻力……
+            </div>
+            <div class="result-url">
+                www.wansheng-group.com.cn/news/2006-03/11.html 
+                <span class="result-cache">千度快照</span>
+            </div>
+        </div>
+
+        <!-- 结果 3：贴吧八卦帖 (烘托悬疑气氛) -->
+        <div class="result-item">
+            <a href="javascript:alert('【系统提示】抱歉，该贴已被吧主删除。');" class="result-title">
+                【江城八卦吧】扒一扒万盛集团那个叫<span class="highlight">林娜</span>的女秘书_千度贴吧
+            </a>
+            <div class="result-snippet">
+                听说万国豪身边那个叫<span class="highlight">林娜</span>的秘书很不简单啊！别看她平时冷冰冰的，听说万盛很多见不得光的公关费用和私下交易，甚至包括去学校摆平那些事，都是她一手去办的。有谁知道她替老板处理过什么事吗……
+            </div>
+            <div class="result-url">
+                tieba.qiandu.com/p/837264911 
+                <span class="result-cache">千度快照</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 页面底部 -->
+    <div class="footer">
+        千度搜索  千度一下，你就知道  ©2006 Qiandu
+    </div>
+
+    <!-- 引用 sjump.js 搜索逻辑组件 -->
+    <script src="sjump.js"></script>
+
+</body>
+</html>
