@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Xiawei_Anael - Dollhouse Diary</title>
+    <!-- 引入像素字体以还原参考图风格 -->
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        /* 深度还原参考图的紫黑渐变与暗黑童话风格 */
+        body {
+            background: linear-gradient(180deg, #0a001a 0%, #29004d 50%, #7e38b7 100%);
+            background-attachment: fixed;
+            color: #e6ccff;
+            font-family: "SimSun", "宋体", serif;
+            margin: 0;
+            padding: 40px 0;
+            cursor: crosshair;
+            min-height: 100vh;
+        }
+
+        /* 像素风英文专用字体 */
+        .pixel-font {
+            font-family: 'VT323', monospace;
+        }
+
+        /* 模拟蕾丝边框的博客主容器 */
+        .blog-wrapper {
+            width: 800px;
+            margin: 0 auto;
+            background: rgba(15, 0, 30, 0.7);
+            border: 6px double #cfa6ff;
+            outline: 2px dashed #a366ff;
+            outline-offset: -12px;
+            position: relative;
+            box-shadow: 0 0 40px rgba(100, 0, 200, 0.4), inset 0 0 30px rgba(0, 0, 0, 0.8);
+            padding: 40px;
+        }
+
+        /* 悬挂的纽扣与玩偶装饰 (纯CSS实现) */
+        .hanging-decor {
+            position: absolute;
+            top: -10px;
+            left: 30px;
+            text-align: center;
+            color: #d9b3ff;
+            font-size: 20px;
+            line-height: 1.2;
+            text-shadow: 0 0 5px #fff;
+        }
+        .hanging-decor .thread { font-size: 12px; letter-spacing: 2px; }
+        .hanging-decor .button { font-size: 24px; color: #9966cc; }
+
+        /* 右上角蜘蛛网 */
+        .spider-web {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 60px;
+            color: #cfa6ff;
+            opacity: 0.6;
+        }
+
+        /* 博客头部：完美复刻参考图的文案 */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header h1 {
+            font-size: 48px;
+            color: #fff;
+            text-shadow: 2px 2px 0px #6600cc, 0 0 15px #cfa6ff;
+            margin: 10px 0;
+            letter-spacing: 2px;
+        }
+
+        .header h2 {
+            font-size: 22px;
+            color: #e6ccff;
+            margin: 5px 0;
+            text-shadow: 1px 1px 0px #330066;
+        }
+
+        /* 浮动的星星与月亮 */
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 150px;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            color: #fff;
+            font-size: 18px;
+            text-shadow: 0 0 5px #fff;
+        }
+        .s1 { position: absolute; top: 20px; left: 150px; font-size: 24px; }
+        .s2 { position: absolute; top: 80px; left: 220px; }
+        .s3 { position: absolute; top: 40px; right: 180px; font-size: 28px; }
+        .moon { position: absolute; top: 30px; right: 120px; font-size: 45px; transform: rotate(-20deg); }
+
+        /* 日志分隔符：玫瑰与蜡烛 */
+        .divider {
+            text-align: center;
+            font-size: 24px;
+            color: #cfa6ff;
+            margin: 40px 0;
+            letter-spacing: 15px;
+            text-shadow: 0 0 10px #ff99ff;
+        }
+        .candle {
+            animation: flicker 0.15s infinite alternate;
+            display: inline-block;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1); text-shadow: 0 0 10px #ffcc00; }
+            100% { transform: scale(1.05); text-shadow: 0 0 20px #ff6600, 0 0 30px #ff0000; }
+        }
+
+        /* 日志内容区域 */
+        .post {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #663399;
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .post-title {
+            font-size: 18px;
+            color: #ffb3ff;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .post-date {
+            font-size: 12px;
+            color: #9966cc;
+            margin-bottom: 20px;
+            font-family: 'VT323', monospace;
+            letter-spacing: 1px;
+        }
+
+        .post-content {
+            font-size: 14px;
+            line-height: 2.2;
+            color: #d9b3ff;
+        }
+
+        /* 疯癫文字特效 */
+        .madness-text {
+            color: #ff3366;
+            font-size: 12px;
+            letter-spacing: -1.5px;
+            line-height: 1;
+            word-wrap: break-word;
+        }
+        
+        .glitch-text {
+            display: inline-block;
+            animation: shake 0.2s infinite;
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            20% { transform: translate(-1px, -2px) rotate(-1deg); }
+            40% { transform: translate(-2px, 1px) rotate(1deg); }
+            60% { transform: translate(1px, -1px) rotate(0deg); }
+            80% { transform: translate(2px, 2px) rotate(1deg); }
+            100% { transform: translate(-1px, -1px) rotate(-1deg); }
+        }
+
+        .post-content img {
+            max-width: 90%;
+            display: block;
+            margin: 20px auto;
+            border: 3px solid #330066;
+            box-shadow: 0 0 15px rgba(0,0,0,0.8);
+            filter: grayscale(20%) sepia(30%) hue-rotate(280deg);
+        }
+
+        /* 隐藏日志互动样式 */
+        .interactive-title {
+            cursor: pointer;
+            color: #ff6699;
+            text-decoration: underline dashed #990033;
+            transition: all 0.3s;
+        }
+        .interactive-title:hover {
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000;
+        }
+
+        #hidden-truth {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(40, 0, 10, 0.8);
+            border-left: 4px solid #ff0000;
+            color: #ffb3b3;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 2;
+            box-shadow: inset 0 0 20px rgba(255, 0, 0, 0.2);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="blog-wrapper">
+        
+        <!-- 背景装饰元素 -->
+        <div class="stars">
+            <span class="s1">★</span>
+            <span class="s2">✦</span>
+            <span class="s3">☆</span>
+            <span class="moon">☾</span>
+        </div>
+        <div class="spider-web">🕸️</div>
+        
+        <div class="hanging-decor">
+            |<br>|<br>
+            |<br>
+            |<br>|<br>
+            🔘<br>
+            |<br>
+            🔘
+        </div>
+
+        <!-- 博客头部 -->
+        <div class="header pixel-font">
+            <h2 style="font-size: 18px; letter-spacing: 4px;">~ Xiawei_Anael ~</h2>
+            <h1>Dollhouse Diary</h1>
+            <h2>Welcome to Xiawei_Anael dark fairy room</h2>
+            <h2>Enter if you dare</h2>
+        </div>
+
+        <div class="divider">
+            🥀 <span class="candle">🕯️</span> 🥀
+        </div>
+
+        <!-- 日志一 -->
+        <div class="post">
+            <div class="post-title">《墙壁里有虫子》</div>
+            <div class="post-date">DATE: 2006-03-01 / TIME: 02:14 AM</div>
+            <div class="post-content">
+                墙壁里有心跳声。不对，是牙齿咀嚼的声音。<br>
+                我明明已经把玻璃罐里的眼珠都捣碎了，可它们还是能看见我。长短不一的黑色虫子，从木地板的缝隙里排着队爬出来，它们在我的草稿纸上咬出了一个个小洞。<br>
+                它们说，只要读懂这些长长短短的骨头，坏掉的人偶就能重新缝合。<br>
+                别出声。门外有东西在呼吸。<br>
+                <img src="mosi.png" alt="密码">
+                <div class="madness-text">缝起来缝起来缝起来把嘴巴缝起来把耳朵缝起来把眼睛缝起来缝起来缝起来</div>
+            </div>
+        </div>
+
+        <!-- 日志二 -->
+        <div class="post">
+            <div class="post-title">《水里好冷》</div>
+            <div class="post-date">DATE: 2006-03-05 / TIME: 04:44 AM</div>
+            <div class="post-content">
+                棉布上的红花是活的。<br>
+                它顺着纤维的纹理一点点爬延，像嘴唇一样张开，贪婪地呼吸着我的体温。好冷... 被子里明明只有我一个人，可是为什么有滑腻腻的东西一直缠着我的脚踝？<br>
+                那个没有嘴巴的布娃娃，昨晚是不是又爬到了我的床上？<br>
+                这是洗不掉的。这是洗不掉的。<br>
+                <img src="床单.png" alt="床单">
+                <div class="madness-text">不要咬我不要咬我不要咬我它没有鳞片它在吸血不要咬我不要咬我不要咬我</div>
+            </div>
+        </div>
+
+        <!-- 日志三 -->
+        <div class="post">
+            <div class="post-title">《撕开撕开撕开》</div>
+            <div class="post-date">DATE: 2006-03-09 / TIME: 23:59 PM</div>
+            <div class="post-content">
+                痒。骨髓深处有东西在结网。<br>
+                皮肤下面有细细的丝线在蠕动，我用指甲用力去挖，想把它们扯出来！可是拉出来的，全是红色的眼泪。<br>
+                它们把我，和那个丑陋的东西死死地缝在一起了。<br>
+                衣柜里的娃娃眼珠转了180度，天花板上密密麻麻全是视线。<br>
+                <span class="glitch-text">不要看我的手腕！转过去！！转过去！！！</span><br>
+                <img src="血.jpg" alt="血痕">
+            </div>
+        </div>
+
+        <div class="divider">
+            🕸️ <span class="candle">🕯️</span> <span class="candle">🕯️</span> 🕸️
+        </div>
+
+        <!-- 日志四：互动隐藏贴 -->
+        <div class="post">
+            <div class="post-title interactive-title" onclick="document.getElementById('hidden-truth').style.display='block'; this.style.color='#ff0000'; this.innerText='《它游过来了》 - [权限已破解]';">
+                《它游过来了》 (Click to open the box...)
+            </div>
+            <div class="post-date">DATE: 2006-03-17 / TIME: 03:33 AM</div>
+            
+            <div id="hidden-truth">
+                我向它许愿了。<br><br>
+                为了换取那个名额，我喂给了那条鱼一个谎言。<br>
+                现在，他正在代替我被鱼群撕咬。<br><br>
+                但昨晚...<br>
+                是他的哥哥...他带着更恐怖的鱼来找我了...<br><br>
+                水漫进来了，救救我救救我救救我——
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

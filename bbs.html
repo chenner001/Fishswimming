@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <title>RED HERRING BBS - 镜像板块：黑水池</title>
+    <style>
+        /* 基础重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "NSimSun", "SimSun", "Courier New", monospace; 
+        }
+
+        /* 核心修复：直接将背景图片写在 body 上，绝对铺满，永不被遮挡 */
+        body {
+            background-image: url('鱼.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #000; /* 仅在图片加载失败时显示黑色 */
+            color: #a30000;
+            overflow-x: hidden;
+        }
+
+        /* 极度透明的血色呼吸层，只加氛围，不遮挡背景的鱼 */
+        .blood-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(163, 0, 0, 0.15);
+            z-index: 1; /* 位于背景之上，内容之下 */
+            pointer-events: none; /* 穿透鼠标点击 */
+            animation: pulseBg 4s infinite alternate;
+        }
+
+        /* 模拟老式CRT显示器的极细扫描线 */
+        .crt-scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
+            background-size: 100% 2px;
+            z-index: 2; 
+            pointer-events: none; 
+        }
+
+        @keyframes pulseBg {
+            0% { background-color: rgba(163, 0, 0, 0.05); }
+            100% { background-color: rgba(163, 0, 0, 0.25); }
+        }
+
+        /* 论坛主容器 */
+        .bbs-container {
+            width: 85%;
+            max-width: 1000px;
+            margin: 40px auto;
+            position: relative;
+            z-index: 10; /* 内容在最高层 */
+        }
+
+        /* 邪典论坛标题 */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid rgba(150, 0, 0, 0.6);
+            padding-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 48px;
+            font-weight: normal;
+            color: #ff1a1a;
+            text-shadow: 0 0 10px #a30000, 2px 2px 0px #300;
+            letter-spacing: 5px;
+            animation: glitchText 3s infinite;
+        }
+
+        header p {
+            color: #cc0000;
+            font-size: 14px;
+            margin-top: 10px;
+            letter-spacing: 2px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        @keyframes glitchText {
+            0%, 96%, 98%, 100% { text-shadow: 0 0 10px #a30000, 2px 2px 0px #300; transform: none; }
+            97% { text-shadow: -2px 0 red, 2px 0 #300; transform: skewX(10deg); }
+            99% { text-shadow: 2px 0 red, -2px 0 #300; transform: skewX(-10deg); }
+        }
+
+        /* 搜索框区域 */
+        .search-area {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .search-box {
+            background: rgba(10, 0, 0, 0.7);
+            border: 1px solid #7a0000;
+            color: #ff1a1a;
+            padding: 12px 20px;
+            font-size: 16px;
+            width: 50%;
+            outline: none;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            border-color: #ff0000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.6), inset 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        .search-box::placeholder {
+            color: #880000;
+            font-style: italic;
+        }
+
+        .search-btn {
+            background: #2a0000;
+            border: 1px solid #7a0000;
+            color: #ff3333;
+            padding: 12px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: -5px;
+            transition: all 0.3s;
+        }
+
+        .search-btn:hover {
+            background: #5a0000;
+            color: #fff;
+            border-color: #ff0000;
+        }
+
+        /* 帖子列表表格 (进一步调高透明度，完全露出背景里的鱼) */
+        .thread-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.3); /* 改为0.3的极高透明度 */
+            border: 1px solid rgba(150, 0, 0, 0.4);
+        }
+
+        .thread-table th {
+            background: rgba(30, 0, 0, 0.7);
+            color: #cc0000;
+            padding: 10px;
+            text-align: left;
+            border-bottom: 2px solid #7a0000;
+            font-weight: normal;
+        }
+
+        .thread-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(80, 0, 0, 0.4);
+            color: #aaa; /* 调亮普通文字颜色以防看不清 */
+        }
+
+        .thread-table tr:hover {
+            background: rgba(80, 0, 0, 0.6);
+        }
+
+        /* 各种帖子标题状态 */
+        .thread-title {
+            color: #ff4444;
+            text-decoration: none;
+            font-size: 15px;
+            display: block;
+            transition: color 0.2s;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .thread-title:hover {
+            color: #ff8888;
+            text-decoration: underline;
+        }
+
+        .hot-post {
+            color: #ff3333;
+            font-weight: bold;
+        }
+
+        .normal-tag {
+            color: #888;
+        }
+
+        .author {
+            color: #b30000;
+            font-size: 13px;
+        }
+
+        .date {
+            color: #777;
+            font-size: 12px;
+        }
+        
+        .replies {
+            color: #8a0000;
+            text-align: center;
+        }
+
+        /* 右下角实时在线人数监控 */
+        .online-monitor {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(10, 0, 0, 0.85);
+            border: 1px solid #5a0000;
+            padding: 8px 12px;
+            color: #8a0000;
+            font-size: 12px;
+            z-index: 100;
+            box-shadow: 0 0 10px rgba(163, 0, 0, 0.2);
+            pointer-events: none; /* 穿透点击，不影响操作 */
+        }
+
+        .online-monitor span {
+            color: #ff1a1a;
+            font-weight: bold;
+            text-shadow: 0 0 3px #ff0000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 视觉特效层（不包含背景，仅包含氛围动画） -->
+    <div class="blood-overlay"></div>
+    <div class="crt-scanlines"></div>
+
+    <div class="bbs-container">
+        <!-- 论坛头部 -->
+        <header>
+            <h1>RED HERRING BBS</h1>
+            <p>【 以 眼 还 眼 ， 以 谎 咬 谎 】</p>
+        </header>
+
+        <!-- 鱼饵搜索框（玩家唯一的前进通道） -->
+        <div class="search-area">
+            <input type="text" class="search-box" placeholder="请输入鱼饵的名字...">
+            <button class="search-btn">投喂</button>
+        </div>
+
+        <!-- 帖子列表 (完全剔除夏唯，均为细思极恐的暗网日常) -->
+        <table class="thread-table">
+            <thead>
+                <tr>
+                    <th width="65%">饵料池 (Thread)</th>
+                    <th width="15%">投饵人 (Author)</th>
+                    <th width="10%" style="text-align:center;">撕咬 (Replies)</th>
+                    <th width="10%">时间 (Time)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 系统公告 (修改href跳转到 system_notice.html) -->
+                <tr>
+                    <td>
+                        <a href="system_notice.html" class="thread-title">
+                            <span class="hot-post">[公告]</span> 新人必看：不要试图寻找红鲱鱼的真实IP，它在你的脑子里。
+                        </a>
+                    </td>
+                    <td class="author">SYSTEM_GOD</td>
+                    <td class="replies">-</td>
+                    <td class="date">01-01</td>
+                </tr>
+
+                <!-- 无关剧情 1：都市传说 -->
+                <tr>
+                    <td>
+                        <a href="#" class="thread-title">
+                            <span class="normal-tag">[求助]</span> 镜子里的‘我’比我晚眨眼0.5秒，我该把他砸碎吗？
+                        </a>
+                    </td>
+                    <td class="author">无瞳者</td>
+                    <td class="replies">412</td>
+                    <td class="date">06-01</td>
+                </tr>
+
+                <!-- 无关剧情 2：血腥交易 -->
+                <tr>
+                    <td>
+                        <a href="#" class="thread-title">
+                            <span class="normal-tag">[交易]</span> 昨晚在南区十字路口车祸现场捡到的长头发，有人需要做降头吗？
+                        </a>
+                    </td>
+                    <td class="author">拾荒人_07</td>
+                    <td class="replies">89</td>
+                    <td class="date">05-31</td>
+                </tr>
+
+                <!-- 剧情伏笔：暗示之前的钟溯事件，但不提夏唯 -->
+                <tr>
+                    <td>
+                        <a href="#" class="thread-title" style="color: #777; text-decoration: line-through;">
+                            <span class="normal-tag">[已吞噬]</span> 实验中学那个卖试卷的穷鬼终于去死了，普天同庆！
+                        </a>
+                    </td>
+                    <td class="author">匿名鱼饵</td>
+                    <td class="replies">4,501</td>
+                    <td class="date">05-13</td>
+                </tr>
+
+                <!-- 无关剧情 3：怪谈规则 -->
+                <tr>
+                    <td>
+                        <a href="#" class="thread-title">
+                            <span class="normal-tag">[分享]</span> 市医院太平间最新守夜规则。第四条绝对不要照做。
+                        </a>
+                    </td>
+                    <td class="author">太平间里的猫</td>
+                    <td class="replies">666</td>
+                    <td class="date">05-12</td>
+                </tr>
+                
+                <!-- 无关剧情 4：赛博精神病 -->
+                <tr>
+                    <td>
+                        <a href="#" class="thread-title">
+                            <span class="normal-tag">[发狂]</span> 肉体是束缚，昨天用美工刀剥开手臂，里面全是绿色的代码哈哈哈哈
+                        </a>
+                    </td>
+                    <td class="author">Error_404</td>
+                    <td class="replies">142</td>
+                    <td class="date">05-10</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 右下角悬浮：在线人数监控 -->
+    <div class="online-monitor">
+        [当前捕食者：<span id="online-count">3</span> 人 (您, 以及 隐藏用户)]
+    </div>
+
+    <!-- 引用外部搜索框加密跳转逻辑 -->
+    <script src="bbsjump1.js"></script>
+
+    <!-- 实时在线人数跳动脚本 (UI控制，不放入加密文件) -->
+    <script>
+        function randomPulse() {
+            const countDisplay = document.getElementById('online-count');
+            // 生成 2 到 9 之间的随机数
+            const nextCount = Math.floor(Math.random() * 8) + 2; 
+            countDisplay.innerText = nextCount;
+
+            // 随机 2秒 到 7秒 之间变动一次，制造不规律的窥视感
+            const nextTime = Math.floor(Math.random() * 5000) + 2000;
+            setTimeout(randomPulse, nextTime);
+        }
+        // 初始化启动
+        setTimeout(randomPulse, 3000);
+    </script>
+</body>
+</html>

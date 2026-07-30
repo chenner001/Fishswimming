@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>......</title>
+    <style>
+        /* 页面极致纯黑，隐藏所有滚动条和多余元素 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            cursor: default;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 隐藏音频播放器UI */
+        audio {
+            display: none;
+        }
+
+        /* 如果浏览器拦截自动播放，用来给玩家的微弱文字提示 */
+        #play-hint {
+            color: #1a1a1a; /* 极暗的灰色，几乎与纯黑背景融为一体 */
+            font-family: "SimSun", "宋体", serif;
+            font-size: 12px;
+            letter-spacing: 2px;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 
+      autoplay: 尝试自动播放
+      注意：这里故意不加 loop 属性，代表音频只会播放一次 
+    -->
+    <audio id="bgm" src="mom_calling.mp3" autoplay></audio>
+
+    <!-- 现代浏览器防拦截提示语 -->
+    <div id="play-hint">点击屏幕任意位置继续...</div>
+
+    <script>
+        const audio = document.getElementById('bgm');
+        const hint = document.getElementById('play-hint');
+
+        // 尝试自动播放音频
+        let playPromise = audio.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                // 自动播放成功，不需要做任何事，保持纯黑
+            }).catch(error => {
+                // 如果浏览器（如 Chrome/Safari）拦截了无交互的自动播放
+                // 则在 3 秒后浮现极暗的提示文字，引导玩家点击屏幕
+                setTimeout(() => {
+                    hint.style.opacity = '1';
+                }, 3000);
+            });
+        }
+
+        // 监听整个屏幕的点击事件（作为突破浏览器自动播放限制的保险措施）
+        document.body.addEventListener('click', function() {
+            audio.play();
+            hint.style.opacity = '0'; // 播放后隐藏提示
+        }, { once: true }); // once: true 确保点击事件只触发一次
+    </script>
+
+</body>
+</html>

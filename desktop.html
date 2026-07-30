@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Windows XP</title>
+    <style>
+        /* ================= 基础重置与系统字体 ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Tahoma, "SimSun", "宋体", sans-serif;
+            user-select: none;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            /* 保持夏唯背景图，如果没有该图则显示经典的XP蓝色 */
+            background: #004e98 url('夏唯.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* ================= 桌面图标网格排列 ================= */
+        .desktop-area {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            height: calc(100% - 30px);
+            padding: 10px;
+            gap: 25px; /* 稍微拉开间距，还原XP感觉 */
+        }
+
+        .desktop-icon {
+            width: 75px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .desktop-icon:hover .icon-text {
+            background-color: rgba(0, 85, 229, 0.6);
+            /* 模拟XP选中的虚线框效果 */
+            outline: 1px dotted rgba(255, 255, 255, 0.6);
+        }
+
+        /* ================= 纯CSS绘制复古图标 ================= */
+        .icon-img-container {
+            width: 48px;
+            height: 48px;
+            position: relative;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 1. IE 浏览器 (蓝色e + 金色光环) */
+        .icon-ie .e-text {
+            color: #1a92d4;
+            font-family: "Arial Black", "Times New Roman", sans-serif;
+            font-style: italic;
+            font-weight: 900;
+            font-size: 42px;
+            line-height: 48px;
+            position: relative;
+            z-index: 2;
+            text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff, 2px 2px 3px rgba(0,0,0,0.5);
+        }
+        .icon-ie .halo {
+            position: absolute;
+            top: 7px;
+            left: -2px;
+            width: 52px;
+            height: 22px;
+            border: 4px solid #f6c836;
+            border-radius: 50%;
+            transform: rotate(-25deg);
+            z-index: 1;
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        .icon-ie .halo::after { /* 光环的前半部分遮挡效果 */
+            content: '';
+            position: absolute;
+            top: -4px; left: -4px; right: -4px; bottom: 50%;
+            border: 4px solid transparent;
+            border-bottom-color: #f6c836;
+            border-radius: 50%;
+            z-index: 3;
+        }
+
+        /* 2. 我的文档 (打开的黄文件夹 + 白纸) */
+        .icon-mydocs .folder-back {
+            position: absolute;
+            bottom: 4px; left: 4px;
+            width: 40px; height: 28px;
+            background: #f1c553;
+            border: 1px solid #c99321;
+            border-radius: 2px;
+            box-shadow: 2px 2px 3px rgba(0,0,0,0.3);
+        }
+        .icon-mydocs .folder-tab {
+            position: absolute;
+            bottom: 31px; left: 4px;
+            width: 16px; height: 6px;
+            background: #f1c553;
+            border: 1px solid #c99321;
+            border-bottom: none;
+            border-radius: 2px 2px 0 0;
+        }
+        .icon-mydocs .paper {
+            position: absolute;
+            bottom: 8px; left: 10px;
+            width: 28px; height: 32px;
+            background: #fff;
+            border: 1px solid #aaa;
+            /* 模拟纸上的文字线条 */
+            background-image: repeating-linear-gradient(to bottom, transparent, transparent 4px, #a3c4f3 4px, #a3c4f3 5px);
+            background-position: 0 6px;
+            background-repeat: no-repeat;
+            background-size: 100% 20px;
+        }
+        .icon-mydocs .folder-front {
+            position: absolute;
+            bottom: 2px; left: 2px;
+            width: 44px; height: 24px;
+            background: linear-gradient(to bottom, #ffe885, #f3c434);
+            border: 1px solid #cc9900;
+            border-radius: 2px;
+            transform: skewX(-12deg);
+            transform-origin: bottom left;
+        }
+
+        /* 3. Word (白底文档 + 蓝色W方块) */
+        .icon-word .doc-bg {
+            position: absolute;
+            top: 2px; right: 4px;
+            width: 32px; height: 40px;
+            background: white;
+            border: 1px solid #2b579a;
+            border-radius: 2px;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            /* 模拟文档上的小横条 */
+            background-image: repeating-linear-gradient(to bottom, transparent, transparent 3px, #e0e0e0 3px, #e0e0e0 4px);
+            background-position: 10px 10px;
+            background-repeat: no-repeat;
+            background-size: 16px 20px;
+        }
+        .icon-word .w-block {
+            position: absolute;
+            top: 12px; left: 2px;
+            width: 28px; height: 22px;
+            background: linear-gradient(to right, #2b579a, #447ae1);
+            color: white;
+            font-family: "Times New Roman", serif;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 22px;
+            text-align: center;
+            border-radius: 3px;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            z-index: 2;
+        }
+
+        /* 经典快捷方式小箭头 (左下角) */
+        .shortcut-arrow {
+            position: absolute;
+            bottom: -2px; left: 0px;
+            width: 14px; height: 14px;
+            background: white;
+            border: 1px solid #777;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        .shortcut-arrow::before {
+            content: '↗';
+            font-size: 12px;
+            font-weight: bold;
+            color: black;
+            line-height: 14px;
+            margin-bottom: 2px;
+            margin-right: 1px;
+        }
+
+        /* ================= 桌面字体 ================= */
+        .icon-text {
+            color: white;
+            font-size: 12px;
+            text-align: center;
+            /* 完美还原截图的 纯黑实体描边 质感 */
+            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 2px 2px rgba(0,0,0,0.8);
+            padding: 1px 3px;
+            margin-top: 2px;
+        }
+
+        /* ================= 经典 XP 任务栏 ================= */
+        .taskbar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(to bottom, #245edb 0%, #3f8cf3 9%, #245edb 18%, #245edb 92%, #333 100%);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .start-btn {
+            background: linear-gradient(to bottom, #3b823b 0%, #4a9e4a 20%, #328a32 80%, #206120 100%);
+            border: none;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            color: white;
+            font-weight: bold;
+            font-style: italic;
+            font-size: 16px;
+            height: 100%;
+            padding: 0 15px 0 10px;
+            box-shadow: inset 1px 1px 3px rgba(255,255,255,0.4), 2px 0 3px rgba(0,0,0,0.3);
+            cursor: default;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .start-logo { font-style: normal; font-size: 18px; color: #fff; text-shadow: 1px 1px 2px #000; }
+
+        .system-tray {
+            margin-left: auto;
+            color: white;
+            font-size: 11px;
+            padding: 0 15px;
+            background: #0f82d1;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 1px solid #14599c;
+            box-shadow: inset 1px 0px 2px rgba(255,255,255,0.2);
+        }
+
+        /* ================= XP 风格窗口 ================= */
+        .xp-window {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #ece9d8;
+            border: 3px solid #0055e5;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            display: none; 
+            z-index: 100;
+            min-width: 300px;
+        }
+
+        .xp-titlebar {
+            background: linear-gradient(to bottom, #0058e6 0%, #3a93ff 8%, #288eff 40%, #127dff 88%, #036bfe 100%);
+            color: white;
+            padding: 4px 8px;
+            font-weight: bold;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+        }
+
+        .xp-close-btn {
+            background: #e81123;
+            color: white;
+            border: 1px solid white;
+            border-radius: 3px;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            line-height: 18px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: inset 1px 1px 2px rgba(255,255,255,0.4);
+        }
+        .xp-close-btn:hover { background: #f04a57; }
+        .xp-close-btn:active { background: #c10e1d; box-shadow: inset 1px 1px 2px rgba(0,0,0,0.5); }
+
+        .xp-content {
+            padding: 15px;
+            font-size: 12px;
+        }
+
+        /* ================= 文件夹内部 ================= */
+        .folder-grid {
+            display: flex;
+            gap: 20px;
+            padding: 15px;
+            background: #ffffff;
+            height: 200px;
+            width: 400px;
+            border: 1px solid #7f9db9;
+        }
+        .sub-folder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 70px;
+            cursor: pointer;
+        }
+        .sub-folder:hover .icon-text { background-color: #316ac5; color: white; border-color: transparent;}
+        .sub-folder .icon-text { color: black; text-shadow: none; border: 1px solid transparent;}
+        
+        /* 文件夹内部简单的黄色图标 */
+        .simple-folder-icon {
+            width: 40px; height: 35px;
+            background: #f1c553;
+            border: 1px solid #c99321;
+            border-radius: 2px;
+            position: relative;
+            margin-bottom: 5px;
+        }
+        .simple-folder-icon::before {
+            content: '';
+            position: absolute;
+            top: -5px; left: -1px;
+            width: 15px; height: 5px;
+            background: #f1c553;
+            border: 1px solid #c99321;
+            border-bottom: none;
+        }
+
+        /* ================= 密码输入弹窗 ================= */
+        .pwd-input {
+            width: 100%;
+            margin: 10px 0;
+            padding: 4px;
+            border: 1px solid #7f9db9;
+        }
+        .btn-group {
+            text-align: right;
+            margin-top: 10px;
+        }
+        .xp-btn {
+            padding: 3px 15px;
+            border: 1px solid #003c74;
+            background: #f0f0ea;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+        .xp-btn:active { background: #dcdcd6; }
+        .error-msg { color: red; font-size: 12px; display: none; }
+
+        /* ================= Word 页面模拟 ================= */
+        .word-container {
+            background: #808080;
+            border: 1px solid #7f9db9;
+            width: 500px;
+            height: 350px;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+        }
+        .word-page {
+            background: white;
+            width: 90%;
+            min-height: 100%;
+            padding: 30px;
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            font-family: "SimSun", "宋体", serif;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            user-select: text;
+        }
+        .word-toolbar {
+            background: #ece9d8;
+            border-bottom: 1px solid #ccc;
+            padding: 5px;
+            font-size: 12px;
+            display: flex;
+            gap: 15px;
+            color: #000;
+        }
+
+        /* ================= 图片浏览器 ================= */
+        .image-viewer {
+            background: white;
+            border: 1px solid #7f9db9;
+            width: 400px;
+            height: 250px;
+            padding: 15px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+        .img-thumb {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #ccc;
+            cursor: pointer;
+            object-fit: cover;
+            background-color: #f0f0f0; 
+        }
+        .img-thumb:hover { border-color: #316ac5; }
+        
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border: 5px solid white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+        .overlay-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= 桌面图标区 ================= -->
+    <div class="desktop-area">
+        
+        <!-- 1. 我的文档 -->
+        <div class="desktop-icon" onclick="openWindow('main-folder')">
+            <div class="icon-img-container icon-mydocs">
+                <div class="folder-tab"></div>
+                <div class="folder-back"></div>
+                <div class="paper"></div>
+                <div class="folder-front"></div>
+            </div>
+            <div class="icon-text">我的文档</div>
+        </div>
+
+        <!-- 2. IE 浏览器 -->
+        <div class="desktop-icon" onclick="window.open('qiandu.html', '_blank')">
+            <div class="icon-img-container icon-ie">
+                <div class="halo"></div>
+                <div class="e-text">e</div>
+            </div>
+            <div class="icon-text">Internet<br>Explorer</div>
+        </div>
+
+        <!-- 3. 桌面的 Word (原 Anael) -->
+        <div class="desktop-icon" onclick="openWindow('word-anael')">
+            <div class="icon-img-container icon-word">
+                <div class="doc-bg"></div>
+                <div class="w-block">W</div>
+                <!-- 还原桌面图标左下角的快捷方式小箭头 -->
+            </div>
+            <div class="icon-text">Word 2006</div>
+        </div>
+
+    </div>
+
+    <!-- ================= 任务栏 ================= -->
+    <div class="taskbar">
+        <button class="start-btn"><span class="start-logo"></span> 开始</button>
+        <div class="system-tray">
+            <span>🌐</span>
+            <span>🔊</span>
+            <span id="clock">15:32</span>
+        </div>
+    </div>
+
+    <!-- ==================== 窗口区域 ==================== -->
+
+    <!-- 我的文档 窗口 -->
+    <div class="xp-window" id="main-folder">
+        <div class="xp-titlebar">
+            <span>我的文档</span>
+            <div class="xp-close-btn" onclick="closeWindow('main-folder')">X</div>
+        </div>
+        <div class="xp-content">
+            <div class="folder-grid">
+                <div class="sub-folder" onclick="requestPassword('folder1')">
+                    <div class="simple-folder-icon"></div>
+                    <div class="icon-text">一起上路吧</div>
+                </div>
+                <div class="sub-folder" onclick="requestPassword('folder2')">
+                    <div class="simple-folder-icon"></div>
+                    <div class="icon-text">瓮中之鱼</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 密码输入弹窗 -->
+    <div class="xp-window" id="pwd-modal" style="z-index: 150;">
+        <div class="xp-titlebar">
+            <span>安全验证</span>
+            <div class="xp-close-btn" onclick="closeWindow('pwd-modal')">X</div>
+        </div>
+        <div class="xp-content">
+            <div>请输入访问密码：</div>
+            <input type="password" id="pwd-input" class="pwd-input" onkeypress="if(event.keyCode==13) verifyPassword()">
+            <div class="error-msg" id="pwd-error">密码错误，请重试。</div>
+            <div class="btn-group">
+                <button class="xp-btn" onclick="verifyPassword()">确定</button>
+                <button class="xp-btn" onclick="closeWindow('pwd-modal')">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 文件夹 1 里的 Word 文档：一起上路吧 -->
+    <div class="xp-window" id="word-confession">
+        <div class="xp-titlebar">
+            <span>日记 - Microsoft Word 2006</span>
+            <div class="xp-close-btn" onclick="closeWindow('word-confession')">X</div>
+        </div>
+        <div class="word-toolbar">
+            <span>文件(F)</span><span>编辑(E)</span><span>视图(V)</span><span>插入(I)</span><span>格式(O)</span>
+        </div>
+        <div class="xp-content" style="padding: 0;">
+            <div class="word-container">
+                <div class="word-page">只要有钟夜在，保送名额永远轮不到我。高考只剩几十天了，我的成绩已经到了极限，凭努力我根本不可能跨越天赋的鸿沟去超越他。万国豪威胁我，如果输了，他就会……我没有时间了，我不能输。既然我已经在万国豪身下变成了一个最脏的人，那我再毁掉一个天才的前途，又有什么区别？钟夜，对不起……</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 文件夹 2：瓮中之鱼 (图片查看器) -->
+    <div class="xp-window" id="folder-images">
+        <div class="xp-titlebar">
+            <span>瓮中之鱼</span>
+            <div class="xp-close-btn" onclick="closeWindow('folder-images')">X</div>
+        </div>
+        <div class="xp-content">
+            <div class="image-viewer">
+                <div style="text-align: center;">
+                    <img src="手机.png" alt="手机" class="img-thumb" onclick="openOverlay('手机.png')">
+                    <div class="icon-text" style="color:black; text-shadow:none;">手机.png</div>
+                </div>
+                <div style="text-align: center;">
+                    <img src="车票.png" alt="车票" class="img-thumb" onclick="openOverlay('车票.png')">
+                    <div class="icon-text" style="color:black; text-shadow:none;">车票.png</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 桌面的 Word 文档：Anael -->
+    <div class="xp-window" id="word-anael">
+        <div class="xp-titlebar">
+            <span>Anael - Microsoft Word 2006</span>
+            <div class="xp-close-btn" onclick="closeWindow('word-anael')">X</div>
+        </div>
+        <div class="word-toolbar">
+            <span>文件(F)</span><span>编辑(E)</span><span>视图(V)</span><span>插入(I)</span><span>格式(O)</span>
+        </div>
+        <div class="xp-content" style="padding: 0;">
+            <div class="word-container">
+                <div class="word-page">Anael，源自古老希伯来语的温柔名字。
+字面之意，即为“神的回答”。
+
+在古老的天使学与星象传说中，他是守护金星的大天使，掌管着世间所有的爱、美、浪漫与艺术灵感。他将天上的光明与深情化为无声的响应，悄悄落入每一个祈求与期盼之中。
+
+那些沉寂在夜晚里的暗自许愿，其实从未被遗忘——
+因为 Anael 这个名字本身，就在轻轻诉说着：
+“凡你所求，皆有回应；凡你所爱，皆蒙眷顾。”</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 大图预览遮罩层 -->
+    <div class="overlay" id="img-overlay">
+        <span class="overlay-close" onclick="closeOverlay()">×</span>
+        <img id="overlay-img" src="" alt="预览图">
+    </div>
+
+    <script>
+        // 更新任务栏时间
+        function updateClock() {
+            const now = new Date();
+            let h = now.getHours();
+            let m = now.getMinutes();
+            m = m < 10 ? '0' + m : m;
+            document.getElementById('clock').innerText = h + ':' + m;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 窗口管理逻辑
+        let currentTargetFolder = '';
+
+        function openWindow(id) {
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function closeWindow(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        // 请求密码
+        function requestPassword(target) {
+            currentTargetFolder = target;
+            document.getElementById('pwd-input').value = '';
+            document.getElementById('pwd-error').style.display = 'none';
+            openWindow('pwd-modal');
+            document.getElementById('pwd-input').focus();
+        }
+
+        // 
+        function verifyPassword() {
+            let input = document.getElementById('pwd-input').value.trim();
+            let errorMsg = document.getElementById('pwd-error');
+            
+            let encodedInput = btoa(encodeURIComponent(input));
+
+            // 
+            // 
+            
+            if (currentTargetFolder === 'folder1' && encodedInput === 'ODg4ODk=') {
+                closeWindow('pwd-modal');
+                openWindow('word-confession');
+            } else if (currentTargetFolder === 'folder2' && encodedInput === 'MTQwMg==') {
+                closeWindow('pwd-modal');
+                openWindow('folder-images');
+            } else {
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        // 大图预览逻辑
+        function openOverlay(imgSrc) {
+            document.getElementById('overlay-img').src = imgSrc;
+            document.getElementById('img-overlay').style.display = 'flex';
+        }
+
+        function closeOverlay() {
+            document.getElementById('img-overlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

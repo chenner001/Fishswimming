@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>归途...</title>
+    <style>
+        /* ================= 基础重置 ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #050505;
+            font-family: "KaiTi", "楷体", "SimSun", "宋体", serif;
+        }
+
+/* ================= 背景无缝滚动动画 ================= */
+        .scrolling-bg-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200vw; /* 关键修复：强制容器等于两倍屏幕宽度 */
+            height: 100%;
+            display: flex;
+            animation: drive 15s linear infinite; 
+            z-index: 1;
+        }
+
+        .bg-img {
+            height: 100vh;
+            width: 100vw; /* 关键修复：强制每张图等于一整个屏幕宽度 */
+            object-fit: cover; /* 保证画面等比例铺满且不拉伸变形 */
+            filter: brightness(0.8) contrast(1.1);
+        }
+
+        @keyframes drive {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* 向左移动刚好一张图的宽度 */
+        }
+
+        /* ================= 大巴车窗剪影 ================= */
+        .bus-window-silhouette {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85vw;
+            height: 75vh;
+            border-radius: 40px;
+            box-shadow: 
+                0 0 0 100vmax #0a0a0a, 
+                inset 0 0 40px rgba(0, 0, 0, 0.9),
+                inset 0 0 10px rgba(0, 0, 0, 1);
+            border: 15px solid #141414;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .glass-reflection {
+            position: absolute;
+            top: -20%;
+            left: -10%;
+            width: 50%;
+            height: 150%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0) 100%);
+            transform: rotate(25deg);
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        /* ================= 底部电影感字幕 ================= */
+        .subtitle-container {
+            position: absolute;
+            bottom: 12%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+            padding: 0 20px;
+        }
+
+        .subtitle {
+            font-size: 22px;
+            color: #ffffff;
+            letter-spacing: 3px;
+            text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        /* ================= XP 启动界面 (居中) ================= */
+        .boot-action-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .xp-boot-btn {
+            background: linear-gradient(to bottom, #3b823b 0%, #4a9e4a 20%, #328a32 80%, #206120 100%);
+            border: 2px solid #ffffff;
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: Tahoma, "Microsoft YaHei", sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            font-style: italic;
+            padding: 12px 35px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6), inset 1px 1px 3px rgba(255,255,255,0.5);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            transition: transform 0.1s, filter 0.2s;
+        }
+
+        .xp-boot-btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .xp-boot-btn:active {
+            transform: scale(0.96);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.8), inset 1px 1px 5px rgba(0,0,0,0.8);
+        }
+
+        /* ================= 修复后的加载条区域 ================= */
+        /* 加载容器（默认完全隐藏） */
+        .loader-wrapper {
+            display: none; 
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        /* XP 经典进度条外框 */
+        .xp-loader {
+            position: relative;
+            width: 160px;
+            height: 18px;
+            border: 2px solid #b3c2d4;
+            border-radius: 4px;
+            background: #000000;
+            box-shadow: 0 0 10px rgba(0,0,0,0.8);
+            overflow: hidden; /* 裁剪溢出的蓝条，修复超框 bug */
+        }
+
+        /* 内部滚动小蓝条（改用绝对定位避免被挤压消失） */
+        .xp-loader-bar {
+            position: absolute;
+            top: 1px;
+            bottom: 1px;
+            width: 35px;
+            background: linear-gradient(to bottom, #2d55f4, #577df8, #2d55f4);
+            border-radius: 2px;
+            animation: xpLoadAnim 1.5s infinite linear;
+        }
+
+        @keyframes xpLoadAnim {
+            0% { left: -40px; }
+            100% { left: 160px; }
+        }
+        
+        /* 加载文字 */
+        .loading-text {
+            color: #fff;
+            font-family: Tahoma, sans-serif;
+            font-size: 14px;
+            margin-top: 12px;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px #000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. 风景无缝移动背景层 -->
+    <div class="scrolling-bg-container">
+        <!-- 放置两张相同的图片以实现无缝对接 -->
+        <img src="风景.png" class="bg-img" alt="风景">
+        <img src="风景.png" class="bg-img" alt="风景">
+    </div>
+
+    <!-- 2. 大巴车窗剪影层 -->
+    <div class="bus-window-silhouette">
+        <div class="glass-reflection"></div>
+    </div>
+
+    <!-- 3. 字幕层 -->
+    <div class="subtitle-container">
+        <div id="subtitle-text" class="subtitle"></div>
+    </div>
+
+    <!-- 4. 交互层：开机按钮与动画 -->
+    <div id="boot-section" class="boot-action-container">
+        <!-- 启动按钮 -->
+        <button id="boot-btn" class="xp-boot-btn">启动旧电脑 (Windows XP)</button>
+        
+        <!-- 加载动画与文字包裹器（初始隐藏，绝不露馅） -->
+        <div id="loader-wrapper" class="loader-wrapper">
+            <div class="xp-loader">
+                <div class="xp-loader-bar"></div>
+            </div>
+            <div class="loading-text">正在启动 Windows...</div>
+        </div>
+    </div>
+
+    <script>
+        // 剧情台词清单
+        const scriptLines = [
+            "自从姐姐去世以后，",
+            "我们搬家去了城里，",
+            "老房子已经很多年没有来过了，",
+            "妈妈说最近打算把老房子卖掉，",
+            "我们才回到老家收拾东西，",
+            "在姐姐房间里，我发现了姐姐当年的电脑。"
+        ];
+
+        const subtitleEl = document.getElementById('subtitle-text');
+        const bootSection = document.getElementById('boot-section');
+        const bootBtn = document.getElementById('boot-btn');
+        const loaderWrapper = document.getElementById('loader-wrapper');
+
+        let currentLine = 0;
+
+        // 字幕播放逻辑
+        function playSubtitles() {
+            if (currentLine < scriptLines.length) {
+                // 1. 设置文字并淡入
+                subtitleEl.innerText = scriptLines[currentLine];
+                subtitleEl.style.opacity = '1';
+
+                // 2. 停留 2.5 秒后开始淡出
+                setTimeout(() => {
+                    subtitleEl.style.opacity = '0';
+                    
+                    // 3. 淡出后等待 1 秒，播放下一句
+                    setTimeout(() => {
+                        currentLine++;
+                        playSubtitles();
+                    }, 1000);
+
+                }, 2500); 
+            } else {
+                // 所有台词播放完毕，淡入中心的“开机”交互区
+                bootSection.style.pointerEvents = 'auto';
+                bootSection.style.opacity = '1';
+            }
+        }
+
+        // 初始化：页面加载后延迟 1.5 秒开始显示第一句台词
+        setTimeout(playSubtitles, 1500);
+
+        // 点击开机按钮事件
+        bootBtn.addEventListener('click', () => {
+            // 隐藏启动按钮
+            bootBtn.style.display = 'none';
+            // 显示加载条和文字的合体框架 (flex)
+            loaderWrapper.style.display = 'flex';
+
+            // 模拟加载 3.5 秒后跳转到桌面
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 3500);
+        });
+    </script>
+</body>
+</html>

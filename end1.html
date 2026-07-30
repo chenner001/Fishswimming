@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anael - 神的回答</title>
+    <style>
+        /* ================= 极简·宿命感·数字纪念碑 UI ================= */
+        :root {
+            --bg-color: #030303;
+            --text-main: #d1d1d1;
+            --text-dim: #555555;
+            --accent-gold: #b89052;
+            --accent-red: #6e1c1c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: "SimSun", "宋体", "STSong", serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 渐现动画，营造电影落幕感 */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 3s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .delay-1 { animation-delay: 1s; }
+        .delay-2 { animation-delay: 2.5s; }
+        .delay-3 { animation-delay: 4.5s; }
+        .delay-4 { animation-delay: 6.5s; }
+        .delay-5 { animation-delay: 8.5s; }
+
+        /* 中央时间轴线 */
+        .timeline-line {
+            width: 1px;
+            height: 120px;
+            background: linear-gradient(to bottom, transparent, var(--text-dim), transparent);
+            margin: 40px auto;
+        }
+
+        /* 主体容器 */
+        .monument-container {
+            max-width: 680px;
+            width: 100%;
+            padding: 80px 30px;
+            text-align: center;
+        }
+
+        /* 顶部年份标记 */
+        .year-mark {
+            font-family: "Georgia", serif;
+            font-size: 18px;
+            letter-spacing: 6px;
+            color: var(--accent-gold);
+            margin-bottom: 60px;
+        }
+
+        /* 章节标题 */
+        .section-title {
+            font-size: 24px;
+            font-weight: normal;
+            letter-spacing: 8px;
+            color: #ffffff;
+            margin-bottom: 40px;
+        }
+
+        /* 判决陈词（散文体） */
+        .destiny-text {
+            font-size: 15px;
+            line-height: 2.4;
+            color: #a0a0a0;
+            text-align: justify;
+            text-align-last: center;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .destiny-text strong {
+            color: #ffffff;
+            font-weight: normal;
+        }
+
+        /* 高亮断句 */
+        .highlight-verse {
+            font-size: 18px;
+            color: var(--accent-gold);
+            margin: 50px 0;
+            letter-spacing: 2px;
+            line-height: 2;
+        }
+
+        /* 结局清单（去表格化，诗意化） */
+        .resolution-list {
+            list-style: none;
+            margin: 60px 0;
+            padding: 0;
+            border-top: 1px solid #1a1a1a;
+            border-bottom: 1px solid #1a1a1a;
+            padding: 40px 0;
+        }
+
+        .resolution-item {
+            margin-bottom: 30px;
+            font-size: 14px;
+            line-height: 2;
+            color: #888;
+        }
+        .resolution-item:last-child { margin-bottom: 0; }
+        
+        .resolution-label {
+            display: block;
+            font-size: 12px;
+            color: var(--accent-red);
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+        }
+
+        /* 底部祭文区 */
+        .epitaph {
+            margin-top: 100px;
+            padding-bottom: 100px;
+        }
+
+        .epitaph-names {
+            font-size: 16px;
+            letter-spacing: 4px;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .epitaph-dates {
+            font-family: "Georgia", serif;
+            font-size: 12px;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+        }
+
+        /* 终局关闭按钮 */
+        .exit-action {
+            margin-top: 80px;
+            opacity: 0;
+            animation: fadeIn 3s ease-in-out 11s forwards; /* 最后出现 */
+        }
+
+        .exit-btn {
+            background: transparent;
+            border: 1px solid var(--text-dim);
+            color: var(--text-dim);
+            padding: 12px 40px;
+            font-size: 12px;
+            letter-spacing: 4px;
+            font-family: "SimSun", "宋体", serif;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .exit-btn:hover {
+            border-color: #ffffff;
+            color: #ffffff;
+            letter-spacing: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="monument-container">
+        
+        <!-- 跨越二十年的宿命 -->
+        <div class="year-mark fade-in">Eternity</div>
+
+        <h1 class="section-title fade-in delay-1">永恒循环</h1>
+
+        <div class="destiny-text fade-in delay-2">
+            时间，是世间最无情的刺客，也是最公正的判官。<br>
+            二十年前，一个绝望的女孩将所有罪证封入暗网，用妥协换取了至亲的平安。<br>
+            二十年后，你，在旧日历的残骸中，替她按下了那个迟到的发送键。<br>
+        </div>
+
+        <div class="highlight-verse fade-in delay-3">
+            “命运的齿轮，历经二十年风霜，终于在此刻完成了残酷而慈悲的闭环。”
+        </div>
+
+        <div class="timeline-line fade-in delay-3"></div>
+
+        <!-- 命运的终审 -->
+        <ul class="resolution-list">
+            <li class="resolution-item fade-in delay-4">
+                <span class="resolution-label">【陨 灭】</span>
+                不可一世的万盛集团，随最高检的雷霆行动灰飞烟灭。<br>
+                罪首万国豪被判处无期徒刑，于铁窗内迎来了他罪恶余生的清算。
+            </li>
+            
+            <li class="resolution-item fade-in delay-4" style="animation-delay: 7.5s;">
+                <span class="resolution-label">【昭 雪】</span>
+                江城实验中学的校史馆里，一份迟到了二十年的撤销处分声明被永久归档。<br>
+                钟夜的名字，洗褪了莫须有的泥沼，重新变回那个白璧无瑕的天才少年。
+            </li>
+
+            <li class="resolution-item fade-in delay-4" style="animation-delay: 8.5s;">
+                <span class="resolution-label">【生 息】</span>
+                当年那个被拼死护在羽翼下的女孩夏伊，如今已过而立之年。<br>
+                她在阳光下成为了一名教师，替那个永远停留在十八岁的姐姐，<br>
+                走完了她未曾见过的、辽阔而平凡的一生。
+            </li>
+        </ul>
+
+        <div class="timeline-line fade-in delay-5"></div>
+
+        <!-- 终局落款 -->
+        <div class="epitaph fade-in delay-5" style="animation-delay: 9.5s;">
+            <div class="destiny-text" style="color:#888; font-style:italic;">
+                Anael，源自古老希伯来语。<br>
+                字面之意，即为“神的回答”。<br><br>
+                原来那些沉寂在黑夜里的暗自许愿，其实从未被遗忘。<br>
+                凡你所求，皆有回应；凡你所爱，皆蒙眷顾。
+            </div>
+            
+            <div style="margin: 60px 0; height: 1px; background: #222; width: 40px; display: inline-block;"></div>
+
+            <div class="epitaph-names">夏 唯 &nbsp;与&nbsp; 钟 夜</div>
+            <div class="epitaph-dates">1988 - 2006 &nbsp;&nbsp;|&nbsp;&nbsp; 1988 - 2006</div>
+        </div>
+
+        <!-- 退出 -->
+        <div class="exit-action">
+            <a href="javascript:window.close();" class="exit-btn">合上档案，返回现实</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

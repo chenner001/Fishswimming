@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Xiawei_Anael - Login to Dollhouse</title>
+    <!-- 引入像素字体以还原参考图风格 -->
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        /* 深度还原紫黑渐变与暗黑童话风格 */
+        body {
+            background: linear-gradient(180deg, #0a001a 0%, #29004d 50%, #7e38b7 100%);
+            background-attachment: fixed;
+            color: #e6ccff;
+            font-family: "SimSun", "宋体", serif;
+            margin: 0;
+            padding: 0;
+            cursor: crosshair;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 像素风英文专用字体 */
+        .pixel-font {
+            font-family: 'VT323', monospace;
+        }
+
+        /* 模拟蕾丝边框的博客主容器 */
+        .login-wrapper {
+            width: 500px;
+            background: rgba(15, 0, 30, 0.75);
+            border: 6px double #cfa6ff;
+            outline: 2px dashed #a366ff;
+            outline-offset: -12px;
+            position: relative;
+            box-shadow: 0 0 40px rgba(100, 0, 200, 0.4), inset 0 0 30px rgba(0, 0, 0, 0.8);
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        /* 悬挂的纽扣与玩偶装饰 */
+        .hanging-decor {
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            text-align: center;
+            color: #d9b3ff;
+            font-size: 18px;
+            line-height: 1.2;
+            text-shadow: 0 0 5px #fff;
+        }
+        .hanging-decor .button { font-size: 20px; color: #9966cc; }
+
+        /* 右上角蜘蛛网 */
+        .spider-web {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 40px;
+            color: #cfa6ff;
+            opacity: 0.5;
+        }
+
+        /* 浮动的星星与月亮 (绝对定位在页面背景上) */
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            color: #fff;
+            text-shadow: 0 0 5px #fff;
+            z-index: -1;
+        }
+        .s1 { position: absolute; top: 10%; left: 20%; font-size: 24px; }
+        .s2 { position: absolute; top: 30%; left: 10%; font-size: 14px; }
+        .s3 { position: absolute; top: 15%; right: 25%; font-size: 28px; }
+        .moon { position: absolute; top: 12%; right: 15%; font-size: 55px; transform: rotate(-20deg); }
+
+        /* 头部文字 */
+        .header h1 {
+            font-size: 36px;
+            color: #fff;
+            text-shadow: 2px 2px 0px #6600cc, 0 0 15px #cfa6ff;
+            margin: 0 0 5px 0;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: #e6ccff;
+            margin: 0 0 30px 0;
+            text-shadow: 1px 1px 0px #330066;
+        }
+
+        /* 表单区域 */
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+            padding: 0 30px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 18px;
+            color: #ffb3ff;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .form-group input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #7a33cc;
+            color: #e6ccff;
+            padding: 12px 15px;
+            font-size: 16px;
+            font-family: 'VT323', monospace;
+            letter-spacing: 2px;
+            outline: none;
+            box-shadow: inset 0 0 10px rgba(100, 0, 200, 0.5);
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            border-color: #cfa6ff;
+            box-shadow: 0 0 15px rgba(200, 150, 255, 0.5), inset 0 0 10px rgba(100, 0, 200, 0.8);
+        }
+
+        /* 锁定的账号框样式 */
+        .locked-input {
+            color: #8855aa !important;
+            border-color: #4d1a80 !important;
+            cursor: not-allowed;
+            text-shadow: none;
+        }
+
+        /* 登录按钮 */
+        .login-btn {
+            background: #29004d;
+            border: 2px solid #9933ff;
+            color: #ffb3ff;
+            padding: 12px 40px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(100, 0, 200, 0.5);
+        }
+
+        .login-btn:hover {
+            background: #4d0099;
+            color: #fff;
+            border-color: #cfa6ff;
+            text-shadow: 0 0 8px #fff;
+            box-shadow: 0 0 20px rgba(200, 150, 255, 0.8);
+        }
+
+        /* 错误提示文字 */
+        .error-msg {
+            color: #ff3366;
+            font-size: 14px;
+            margin-top: 15px;
+            font-weight: bold;
+            display: none;
+            text-shadow: 0 0 5px #ff0000;
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 背景装饰元素 -->
+    <div class="stars">
+        <span class="s1">★</span>
+        <span class="s2">✦</span>
+        <span class="s3">☆</span>
+        <span class="moon">☾</span>
+    </div>
+
+    <!-- 登录框容器 -->
+    <div class="login-wrapper">
+        
+        <div class="hanging-decor">
+            |<br>
+            |<br>
+            |<br>
+            🔘
+        </div>
+        <div class="spider-web">🕸️</div>
+
+        <div class="header pixel-font">
+            <h1>Dollhouse Gate</h1>
+            <p>Enter the frequency to unlock the door</p>
+        </div>
+
+        <!-- 账号已自动填写且禁止修改 -->
+        <div class="form-group pixel-font">
+            <label>ID / Owner :</label>
+            <input type="text" value="Xiawei_Anael" readonly class="locked-input">
+        </div>
+
+        <div class="form-group pixel-font">
+            <label>KEY / Password :</label>
+            <input type="password" id="pwd" placeholder="Enter key..." autocomplete="off">
+        </div>
+
+        <button class="login-btn pixel-font" id="login-btn">ENTER</button>
+
+        <div class="error-msg" id="error-msg">
+            Access Denied. The dolls are watching you...
+        </div>
+    </div>
+
+    <!-- 登录逻辑与加密跳转 -->
+    <script>
+        // 
+        (function(){
+            var _0x1a = ["\x6c\x6f\x67\x69\x6e\x2d\x62\x74\x6e","\x70\x77\x64","\x65\x72\x72\x6f\x72\x2d\x6d\x73\x67","\x76\x61\x6c\x75\x65","\x52\x6b\x30\x35\x4f\x43\x34\x32","\x59\x6d\x39\x72\x5a\x53\x35\x6f\x64\x47\x31\x73","\x68\x72\x65\x66","\x6c\x6f\x63\x61\x74\x69\x6f\x6e","\x73\x74\x79\x6c\x65","\x64\x69\x73\x70\x6c\x61\x79","\x62\x6c\x6f\x63\x6b","","\x63\x6c\x69\x63\x6b","\x61\x64\x64\x45\x76\x65\x6e\x74\x4c\x69\x73\x74\x65\x6e\x65\x72","\x6b\x65\x79\x70\x72\x65\x73\x73","\x6b\x65\x79","\x45\x6e\x74\x65\x72","\x69\x6e\x70\x75\x74","\x6e\x6f\x6e\x65"];
+            var _b = document.getElementById(_0x1a[0]);
+            var _p = document.getElementById(_0x1a[1]);
+            var _e = document.getElementById(_0x1a[2]);
+            
+            function _c(){
+                // 
+                if(btoa(_p[_0x1a[3]]) === _0x1a[4]){
+                    // 
+                    window[_0x1a[7]][_0x1a[6]] = atob(_0x1a[5]);
+                } else {
+                    _e[_0x1a[8]][_0x1a[9]] = _0x1a[10];
+                    _p[_0x1a[3]] = _0x1a[11];
+                    _p.focus();
+                }
+            }
+            
+            _b[_0x1a[13]](_0x1a[12], _c);
+            
+            _p[_0x1a[13]](_0x1a[14], function(e){
+                if(e[_0x1a[15]] === _0x1a[16]) _c();
+            });
+            
+            _p[_0x1a[13]](_0x1a[17], function(){
+                _e[_0x1a[8]][_0x1a[9]] = _0x1a[18];
+            });
+        })();
+    </script>
+</body>
+</html>

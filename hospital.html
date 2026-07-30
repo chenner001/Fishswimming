@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>江城第一人民医院 - 官方网站</title>
+    <style>
+        /* 基础重置与现代化排版 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", sans-serif;
+            color: #333;
+        }
+
+        /* 顶部深绿色信息条 (清空了右侧字样，仅保留左侧服务热线占位) */
+        .top-bar {
+            background-color: #005a30;
+            color: #ffffff;
+            height: 36px;
+            line-height: 36px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10%;
+        }
+
+        /* 头部导航区 (Logo + 菜单) */
+        .header {
+            background-color: #ffffff;
+            padding: 20px 10%;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eaeaea;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            margin-right: auto;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background-color: #005a30;
+            border-radius: 50%;
+            position: relative;
+            margin-right: 15px;
+        }
+        
+        .logo-icon::before, .logo-icon::after {
+            content: "";
+            position: absolute;
+            background: #ffffff;
+            border-radius: 2px;
+        }
+        .logo-icon::before { width: 10px; height: 26px; top: 9.5px; left: 17.5px; }
+        .logo-icon::after { width: 26px; height: 10px; top: 17.5px; left: 9.5px; }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            letter-spacing: 2px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            padding-bottom: 5px;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-menu a.active {
+            color: #005a30;
+            border-bottom: 2px solid #005a30;
+            font-weight: bold;
+        }
+
+        .nav-menu a:hover {
+            color: #005a30;
+        }
+
+        /* 面包屑导航 */
+        .breadcrumb {
+            padding: 15px 10%;
+            font-size: 13px;
+            color: #666;
+            background: #ffffff;
+        }
+        #current-page-name { color: #333; font-weight: bold; }
+
+        /* 中间主体区域 */
+        .main-container {
+            padding: 40px 10%;
+            min-height: 500px;
+        }
+
+        /* 选项卡内容容器 */
+        .tab-content {
+            display: none;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            line-height: 1.8;
+            color: #555;
+            animation: fadeIn 0.4s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 通用文章标题 */
+        .content-title {
+            font-size: 22px;
+            font-weight: normal;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 15px;
+        }
+
+        /* 各板块通用简易排版 */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .grid-card {
+            border: 1px solid #eaeaea;
+            padding: 20px;
+            border-radius: 4px;
+            background: #fafafa;
+        }
+        .grid-card h4 { margin: 0 0 10px 0; color: #005a30; font-size: 16px; border-bottom: 1px solid #ddd; padding-bottom: 5px;}
+        .grid-card ul { margin: 0; padding-left: 20px; font-size: 14px; color: #666; }
+        .grid-card li { margin-bottom: 5px; }
+
+        /* ====== 病历查询板块专属样式 ====== */
+        #search-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: #fdfdfd;
+            padding: 20px 30px;
+            border: 1px solid #eaeaea;
+            border-radius: 4px;
+        }
+
+        .search-inputs {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-inputs select, .search-inputs input {
+            padding: 0 15px;
+            height: 38px;
+            border: 1px solid #dcdcdc;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .search-inputs select:focus, .search-inputs input:focus {
+            border-color: #005a30;
+        }
+
+        .search-inputs input { width: 260px; }
+
+        .btn-query {
+            background-color: #005a30;
+            color: #ffffff;
+            border: none;
+            height: 38px;
+            padding: 0 30px;
+            font-size: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-query:hover { background-color: #004524; }
+        .btn-query:disabled { background-color: #999; cursor: not-allowed; }
+
+        #sys-msg { text-align: right; font-size: 13px; height: 20px; margin-top: -20px; margin-bottom: 20px; }
+
+        /* ====== 严肃官方的白色纸张结果 ====== */
+        #result-area { display: none; }
+        
+        .official-paper {
+            background: #ffffff;
+            width: 800px;
+            margin: 0 auto;
+            padding: 60px 80px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-top: 6px solid #005a30;
+            position: relative;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 40px;
+            right: 80px;
+            width: 120px;
+            height: 120px;
+            border: 4px solid #d32f2f;
+            border-radius: 50%;
+            color: #d32f2f;
+            text-align: center;
+            line-height: 120px;
+            font-size: 18px;
+            font-weight: bold;
+            font-family: "SimHei", "黑体";
+            transform: rotate(-25deg);
+            opacity: 0.85;
+            pointer-events: none;
+            box-shadow: inset 0 0 5px rgba(211,47,47,0.2);
+        }
+        .stamp::after {
+            content: "病历档案专用章";
+            position: absolute;
+            left: 50%;
+            top: 65%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .paper-title {
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+            font-family: "SimSun", "宋体", serif;
+            color: #000;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+        }
+
+        .paper-row {
+            font-family: "SimSun", "宋体", serif;
+            font-size: 16px;
+            line-height: 2.5;
+            color: #000;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+        }
+        .paper-row .label { font-weight: bold; width: 120px; color: #333; }
+        .paper-row .value { flex: 1; }
+        
+        .paper-footer {
+            margin-top: 50px;
+            border-top: 2px solid #000;
+            padding-top: 20px;
+            font-family: "SimSun", "宋体", serif;
+            font-size: 16px;
+            color: #000;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部状态栏 -->
+    <div class="top-bar">
+        <span>服务热线：027-8888XXXX</span>
+        <span></span> <!-- 右侧留空，删除了之前的版本文字 -->
+    </div>
+
+    <!-- 导航与Logo -->
+    <div class="header">
+        <div class="logo-area">
+            <div class="logo-icon"></div>
+            <div class="logo-text">江城第一人民医院</div>
+        </div>
+        <div class="nav-menu">
+            <a class="active" onclick="switchTab('tab-home', this, '首页')">首页</a>
+            <a onclick="switchTab('tab-overview', this, '医院概况')">医院概况</a>
+            <a onclick="switchTab('tab-depts', this, '科室导航')">科室导航</a>
+            <a onclick="switchTab('tab-guide', this, '就医指南')">就医指南</a>
+            <a onclick="switchTab('tab-query', this, '病历查询')">病历查询</a>
+        </div>
+    </div>
+
+    <!-- 面包屑 -->
+    <div class="breadcrumb" id="breadcrumb-bar">
+        您现在的位置： 江城第一人民医院 > <span id="current-page-name">首页</span>
+    </div>
+
+    <!-- 核心主体区 -->
+    <div class="main-container" id="main-container">
+        
+        <!-- ================= [板块1：首页] ================= -->
+        <div id="tab-home" class="tab-content active">
+            <h2 class="content-title">欢迎访问江城第一人民医院</h2>
+            <img src="医院.png" alt="江城第一人民医院" style="width:100%; border-radius:4px; margin-bottom: 20px;">
+            <p>江城第一人民医院是集医疗、教学、科研、预防保健和急救于一体的大型综合性三级甲等医院。医院秉承“厚德精医，博学济世”的院训，致力于为广大患者提供高质量的医疗服务。</p>
+            <p><strong>最新公告：</strong>本院自助病历查询系统已全面升级，患者可在线调阅历史电子医疗档案。详见【病历查询】专区。</p>
+        </div>
+
+        <!-- ================= [板块2：医院概况] ================= -->
+        <div id="tab-overview" class="tab-content">
+            <h2 class="content-title">医院概况</h2>
+            <p>江城第一人民医院建院于1952年，历经七十余年的发展，现已成为区域内规模最大、技术力量最雄厚的医疗中心。</p>
+            <p>医院占地面积近15万平方米，编制床位2800张，年门急诊量突破300万人次。拥有国家级临床重点专科5个，省级临床重点专科22个。在心血管内科、重症医学科、骨髓移植中心等领域处于国内领先水平。</p>
+            <p>我们始终坚持“以患者为中心”的服务理念，不断引进国际先进的诊疗设备，优化就医流程，为您的健康保驾护航。</p>
+        </div>
+
+        <!-- ================= [板块3：科室导航] ================= -->
+        <div id="tab-depts" class="tab-content">
+            <h2 class="content-title">科室导航</h2>
+            <p>我院设有门急诊、内外科、重症及特需医疗等50多个专业科室，满足各类患者的就诊需求。</p>
+            <div class="grid-layout">
+                <div class="grid-card">
+                    <h4>非手术科室</h4>
+                    <ul>
+                        <li>心血管内科</li>
+                        <li>呼吸与危重症医学科</li>
+                        <li>消化内科</li>
+                        <li>血液内科</li>
+                        <li>神经内科</li>
+                    </ul>
+                </div>
+                <div class="grid-card">
+                    <h4>手术科室</h4>
+                    <ul>
+                        <li>基本外科</li>
+                        <li>骨科</li>
+                        <li>心胸外科</li>
+                        <li>泌尿外科</li>
+                        <li>神经外科</li>
+                    </ul>
+                </div>
+                <div class="grid-card">
+                    <h4>重症与医技科室</h4>
+                    <ul>
+                        <li>重症医学科 (ICU)</li>
+                        <li>急诊科</li>
+                        <li>医学影像科</li>
+                        <li>检验科</li>
+                        <li>药剂科</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= [板块4：就医指南] ================= -->
+        <div id="tab-guide" class="tab-content">
+            <h2 class="content-title">就医指南</h2>
+            <div style="display: flex; gap: 20px; align-items: center; justify-content: space-around; text-align: center; padding: 30px 0;">
+                <div>
+                    <div style="background:#005a30; color:#fff; width:50px; height:50px; line-height:50px; border-radius:50%; margin:0 auto 10px; font-size:20px;">1</div>
+                    <strong>实名挂号</strong><br><span style="font-size:12px; color:#888;">线上/线下预约</span>
+                </div>
+                <div style="color:#ccc;">━━━</div>
+                <div>
+                    <div style="background:#005a30; color:#fff; width:50px; height:50px; line-height:50px; border-radius:50%; margin:0 auto 10px; font-size:20px;">2</div>
+                    <strong>门诊就诊</strong><br><span style="font-size:12px; color:#888;">前往对应科室</span>
+                </div>
+                <div style="color:#ccc;">━━━</div>
+                <div>
+                    <div style="background:#005a30; color:#fff; width:50px; height:50px; line-height:50px; border-radius:50%; margin:0 auto 10px; font-size:20px;">3</div>
+                    <strong>缴费检查</strong><br><span style="font-size:12px; color:#888;">自助机/人工窗口</span>
+                </div>
+                <div style="color:#ccc;">━━━</div>
+                <div>
+                    <div style="background:#005a30; color:#fff; width:50px; height:50px; line-height:50px; border-radius:50%; margin:0 auto 10px; font-size:20px;">4</div>
+                    <strong>取药/离院</strong><br><span style="font-size:12px; color:#888;">药房窗口报到</span>
+                </div>
+            </div>
+            <p style="color: #d32f2f; font-size: 13px; text-align: center;">* 温馨提示：就诊请务必携带患者本人的有效身份证件或社会保障卡。</p>
+        </div>
+
+        <!-- ================= [板块5：病历查询 (核心解谜区)] ================= -->
+        <div id="tab-query" class="tab-content">
+            <div id="query-interface">
+                <div id="search-area">
+                    <div class="page-title" style="margin:0; border:none; padding:0;">电子病历归档查询</div>
+                    <div class="search-inputs">
+                        <!-- 默认年份为现代，需玩家手动调回 2006 -->
+                        <select id="query-year">
+                            <option value="2026" selected>2026年度</option>
+                            <option value="2025">2025年度</option>
+                            <option value="2024">2024年度</option>
+                            <option value="---" disabled>--- 历史档案 ---</option>
+                            <option value="2008">2008年度</option>
+                            <option value="2007">2007年度</option>
+                            <option value="2006">2006年度</option>
+                        </select>
+                        <input type="text" id="query-id" placeholder="请输入患者身份证号" maxlength="18" autocomplete="off">
+                        <button class="btn-query" onclick="executeSearch()" id="query-btn">查 询</button>
+                    </div>
+                </div>
+
+                <div id="sys-msg"></div>
+
+                <p>尊敬的患者/家属：<br>
+                为方便广大群众就医档案管理，本院已开通电子病历档案自助查询系统。您可通过选择就诊/归档年份，并输入患者有效身份证件号码，实时调阅历史住院、门诊及缴费凭证记录。</p>
+                <p style="color: #d32f2f; font-size: 13px;">* 注：根据医疗档案管理条例，涉密级重症档案查阅行为已被系统实时监控记录。请勿违规查询他人隐私。</p>
+            </div>
+        </div>
+
+        <!-- ================= [隐藏结果：官方白纸] ================= -->
+        <div id="result-area">
+            <div class="official-paper">
+                <div class="stamp">江城一院</div>
+                <div class="paper-title">江城第一人民医院<br><span style="font-size: 18px; font-weight: normal;">电子住院病历(归档)</span></div>
+                
+                <div class="paper-row">
+                    <div class="label">建档年份：</div>
+                    <div class="value">2006 年</div>
+                </div>
+                <div class="paper-row">
+                    <div class="label">患者姓名：</div>
+                    <div class="value" style="font-weight: bold; font-size: 18px;">夏伊 <span style="font-size: 14px; font-weight: normal; color: #666;">（女，4岁）</span></div>
+                </div>
+                <div class="paper-row">
+                    <div class="label">身份证号：</div>
+                    <div class="value">420106200201010021</div>
+                </div>
+                <div class="paper-row">
+                    <div class="label">入院诊断：</div>
+                    <div class="value" style="font-weight: bold;">重型再生障碍性贫血（ICU重症监护中）</div>
+                </div>
+                <div class="paper-row">
+                    <div class="label">缴费记录：</div>
+                    <div class="value">2006年7月5日 收到<span style="border-bottom: 1px solid #000;">万盛地产</span>定向医疗赞助 <strong>￥200,000.00 RMB</strong></div>
+                </div>
+
+                <div class="paper-footer">
+                    <strong>出院小结：</strong><br>
+                    骨髓移植成功。患者各项生命体征平稳，术后因高烧引发暂时性选择性失忆，已转入普通病房观察。
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 交互逻辑 -->
+    <script>
+        // 1. 板块切换逻辑
+        function switchTab(tabId, el, pageName) {
+            // 如果查出了结果，拦截所有切换（营造无法逃避的压迫感）
+            if(document.getElementById('result-area').style.display === 'block') {
+                return;
+            }
+
+            // 移除所有 active 类
+            var links = document.querySelectorAll('.nav-menu a');
+            links.forEach(function(link) { link.classList.remove('active'); });
+            
+            var contents = document.querySelectorAll('.tab-content');
+            contents.forEach(function(content) { content.classList.remove('active'); });
+
+            // 激活当前选中
+            el.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+            
+            // 更新面包屑
+            document.getElementById('current-page-name').innerText = pageName;
+        }
+
+        // 2. 核心搜索与解密逻辑 (MjAwNg== -> 2006, NDIwMTA2MjAwMjAxMDEwMDIx -> 420106200201010021)
+        const _0xdbKey = { y: "MjAwNg==", i: "NDIwMTA2MjAwMjAxMDEwMDIx" };
+
+        function executeSearch() {
+            var yInput = document.getElementById("query-year").value;
+            var iInput = document.getElementById("query-id").value.trim();
+            var sysMsg = document.getElementById("sys-msg");
+            
+            var btn = document.getElementById("query-btn");
+            var resultArea = document.getElementById("result-area");
+
+            sysMsg.style.color = "#333";
+            sysMsg.innerText = "正在连接省卫健委数据库校验身份，请稍候...";
+            btn.disabled = true;
+            btn.innerText = "检 索 中...";
+
+            setTimeout(function() {
+                // Base64 校验
+                if (btoa(yInput) === _0xdbKey.y && btoa(iInput) === _0xdbKey.i) {
+                    sysMsg.innerText = "校验通过，正在调取绝密档案...";
+                    sysMsg.style.color = "#005a30";
+                    
+                    // 剧烈压迫感：将所有普通网页内容直接隐藏，仅留下一张纯白的审判纸
+                    setTimeout(function() {
+                        // 隐藏面包屑和所有普通 Tab
+                        document.getElementById("breadcrumb-bar").style.display = "none";
+                        var contents = document.querySelectorAll('.tab-content');
+                        contents.forEach(function(content) { content.style.display = 'none'; });
+                        
+                        // 显示结果
+                        resultArea.style.display = "block";
+                    }, 800);
+
+                } else {
+                    sysMsg.style.color = "#d32f2f";
+                    sysMsg.innerText = "错误：未查询到该年度的住院信息或输入有误。";
+                    btn.disabled = false;
+                    btn.innerText = "查 询";
+                }
+            }, 1200);
+        }
+    </script>
+</body>
+</html>

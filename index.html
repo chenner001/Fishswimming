@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统警告：阅前声明</title>
+    <style>
+        /* ================= 沉浸式微恐/档案风 UI ================= */
+        :root {
+            --bg-dark: #050505;
+            --text-main: #cccccc;
+            --text-dim: #666666;
+            --alert-red: #8b0000;
+            --alert-red-glow: rgba(139, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: "SimSun", "STSong", "宋体", serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* 屏幕扫描线与微弱噪点 (增加微恐复古感) */
+        body::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        /* 主声明卡片 */
+        .declaration-box {
+            position: relative;
+            z-index: 10;
+            max-width: 680px;
+            width: 90%;
+            background: #080808;
+            border: 1px solid #1f1f1f;
+            border-top: 3px solid var(--alert-red);
+            padding: 50px 45px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: scale(0.98);
+            animation: bootUp 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes bootUp {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* 顶部警告头 */
+        .warning-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .warning-title {
+            color: var(--alert-red);
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px var(--alert-red-glow);
+        }
+
+        .warning-subtitle {
+            color: var(--text-dim);
+            font-size: 12px;
+            letter-spacing: 2px;
+            font-family: monospace;
+        }
+
+        /* 条款列表 */
+        .clause-list {
+            list-style: none;
+        }
+
+        .clause-item {
+            margin-bottom: 25px;
+            line-height: 1.8;
+            font-size: 14px;
+            color: #a0a0a0;
+            text-align: justify;
+        }
+
+        .clause-label {
+            display: block;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            border-left: 2px solid var(--alert-red);
+            padding-left: 10px;
+        }
+
+        .highlight {
+            color: var(--alert-red);
+            font-weight: bold;
+        }
+
+        /* 底部信息汇总 */
+        .meta-info {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px dashed #222;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-dim);
+            font-family: monospace;
+        }
+
+        /* 交互按钮 */
+        .action-container {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .accept-btn {
+            background: transparent;
+            color: #ffffff;
+            border: 1px solid #333;
+            padding: 12px 35px;
+            font-family: "SimSun", "宋体", serif;
+            font-size: 14px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .accept-btn:hover {
+            border-color: var(--alert-red);
+            color: var(--alert-red);
+            background: rgba(139, 0, 0, 0.05);
+            box-shadow: 0 0 15px var(--alert-red-glow);
+        }
+
+        .accept-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* 离场淡出动画 */
+        .fade-out {
+            animation: powerOff 1s ease forwards;
+        }
+
+        @keyframes powerOff {
+            0% { opacity: 1; filter: contrast(1); }
+            50% { filter: contrast(2) brightness(0.5); }
+            100% { opacity: 0; transform: scale(1.02); filter: blur(2px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="declaration-box" id="decl-box">
+        <div class="warning-header">
+            <div class="warning-title">【最高级别预警 & 游玩规约】</div>
+            <div class="warning-subtitle">ARCHIVE ACCESS DECLARATION_</div>
+        </div>
+
+        <ul class="clause-list">
+            <!-- 1. 虚构与免责 -->
+            <li class="clause-item">
+                <span class="clause-label">I. 性质声明与行为规劝</span>
+                本作品为完全虚构的互动解密档案。剧中涉及的所有人物、事件、机构及地点均属剧情设定。如现实中存在雷同，纯属巧合。<span class="highlight">游戏内包含的部分极端行为仅为推动剧情所需，请勿在现实中模仿。</span>
+            </li>
+
+            <!-- 2. 心理预警 -->
+            <li class="clause-item">
+                <span class="clause-label">II. 心理预警（CW / TW）</span>
+                本作带有悬疑及<span class="highlight">微恐元素</span>，包含沉重、压抑及暗黑向剧情（如胁迫、悲剧结局等）。请对相关题材敏感的玩家谨慎游玩，如感不适，请立即关闭网页。
+            </li>
+
+            <!-- 3. 生理预警 -->
+            <li class="clause-item">
+                <span class="clause-label">III. 生理与感官提示</span>
+                游玩过程中存在轻微的视觉闪屏效果，但本作承诺<span class="highlight">全程无突脸（No Jumpscare）惊吓</span>。部分线索及最终结局需依赖音频传达，<span class="highlight">请务必打开声音（建议佩戴耳机）</span>。
+            </li>
+
+            <!-- 4. 游玩规则 -->
+            <li class="clause-item">
+                <span class="clause-label">IV. 交互规约</span>
+                为保障解密体验，<span class="highlight">仅推荐使用电脑浏览器游玩</span>。本游戏为线性沉浸式探索，<span class="highlight">无页码概念</span>。所有谜题均可于页面视觉内解开，<span class="highlight">无需通过查看网页源代码（F12）获取线索，但需要外部邮箱触发剧情</span>。
+            </li>
+        </ul>
+
+        <div class="meta-info">
+            <span>预计调阅时长：1 ~ 2 小时</span>
+            <span>SYSTEM STATUS: STANDBY</span>
+        </div>
+
+        <div class="action-container">
+            <button class="accept-btn" onclick="acceptAndStart()">我已悉知并同意</button>
+        </div>
+    </div>
+
+    <script>
+        function acceptAndStart() {
+            // 尝试开启浏览器全屏，增强代入感
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            }
+
+            // 触发类似老式显示器关闭/故障的淡出动画
+            const box = document.getElementById('decl-box');
+            box.classList.add('fade-out');
+
+            // 1秒后跳转至序章 (大巴车场景)
+            setTimeout(() => {
+                window.location.href = 'intro.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

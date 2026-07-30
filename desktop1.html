@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Windows XP - 终局</title>
+    <style>
+        /* ================= 基础重置与系统字体 ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Tahoma, "SimSun", "宋体", sans-serif;
+            user-select: none;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #004e98 url('牢笼.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* ================= 桌面图标 (剥夺点击与悬停效果) ================= */
+        .desktop-area {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            height: calc(100% - 30px);
+            padding: 10px;
+            gap: 25px;
+        }
+        
+        .desktop-icon {
+            width: 75px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* 剥夺点击手势 */
+            cursor: default; 
+            opacity: 0.8;
+        }
+
+        /* 纯CSS绘制复古图标 (静态展示) */
+        .icon-img-container {
+            width: 48px; height: 48px; position: relative; margin-bottom: 5px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* 1. IE 浏览器 */
+        .icon-ie .e-text {
+            color: #1a92d4; font-family: "Arial Black", sans-serif; font-style: italic; font-weight: 900; font-size: 42px;
+            text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff, 2px 2px 3px rgba(0,0,0,0.5);
+            position: relative; z-index: 2;
+        }
+        .icon-ie .halo {
+            position: absolute; top: 7px; left: -2px; width: 52px; height: 22px;
+            border: 4px solid #f6c836; border-radius: 50%; transform: rotate(-25deg); z-index: 1;
+        }
+
+        /* 2. 我的文档 */
+        .icon-mydocs .folder-back { position: absolute; bottom: 4px; left: 4px; width: 40px; height: 28px; background: #f1c553; border: 1px solid #c99321; }
+        .icon-mydocs .folder-tab { position: absolute; bottom: 31px; left: 4px; width: 16px; height: 6px; background: #f1c553; border: 1px solid #c99321; border-bottom: none; }
+        .icon-mydocs .paper { position: absolute; bottom: 8px; left: 10px; width: 28px; height: 32px; background: #fff; border: 1px solid #aaa; }
+        .icon-mydocs .folder-front { position: absolute; bottom: 2px; left: 2px; width: 44px; height: 24px; background: linear-gradient(to bottom, #ffe885, #f3c434); border: 1px solid #cc9900; transform: skewX(-12deg); transform-origin: bottom left; }
+
+        /* 3. Word */
+        .icon-word .doc-bg { position: absolute; top: 2px; right: 4px; width: 32px; height: 40px; background: white; border: 1px solid #2b579a; }
+        .icon-word .w-block { position: absolute; top: 12px; left: 2px; width: 28px; height: 22px; background: linear-gradient(to right, #2b579a, #447ae1); color: white; font-family: "Times New Roman", serif; font-weight: bold; font-size: 16px; line-height: 22px; text-align: center; z-index: 2; }
+
+        .icon-text {
+            color: white; font-size: 12px; text-align: center;
+            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 2px 2px rgba(0,0,0,0.8);
+            padding: 1px 3px; margin-top: 2px;
+        }
+
+        /* ================= 任务栏与开始菜单 ================= */
+        .taskbar {
+            position: absolute; bottom: 0; width: 100%; height: 30px;
+            background: linear-gradient(to bottom, #245edb 0%, #3f8cf3 9%, #245edb 18%, #245edb 92%, #333 100%);
+            display: flex; align-items: center; z-index: 1000;
+        }
+
+        .start-btn {
+            background: linear-gradient(to bottom, #3b823b 0%, #4a9e4a 20%, #328a32 80%, #206120 100%);
+            border: none; border-top-right-radius: 10px; border-bottom-right-radius: 10px;
+            color: white; font-weight: bold; font-style: italic; font-size: 16px;
+            height: 100%; padding: 0 15px 0 10px; box-shadow: inset 1px 1px 3px rgba(255,255,255,0.4), 2px 0 3px rgba(0,0,0,0.3);
+            cursor: pointer; display: flex; align-items: center; gap: 5px;
+        }
+        .start-btn:active { background: linear-gradient(to bottom, #206120 0%, #328a32 80%, #4a9e4a 100%); }
+        .start-logo { font-style: normal; font-size: 18px; color: #fff; text-shadow: 1px 1px 2px #000; }
+
+        .system-tray {
+            margin-left: auto; color: white; font-size: 11px; padding: 0 15px;
+            background: #0f82d1; height: 100%; display: flex; align-items: center; gap: 10px;
+            border-left: 1px solid #14599c; box-shadow: inset 1px 0px 2px rgba(255,255,255,0.2);
+        }
+
+        /* 隐藏的开始菜单 */
+        .start-menu {
+            position: absolute; bottom: 30px; left: 0; width: 250px;
+            background: #fff; border: 2px solid #0055e5; border-top-left-radius: 5px; border-top-right-radius: 5px;
+            display: none; flex-direction: column; z-index: 999;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+        .start-menu-header {
+            background: linear-gradient(to bottom, #0058e6 0%, #3a93ff 8%, #288eff 40%, #127dff 88%, #036bfe 100%);
+            color: white; padding: 10px; font-weight: bold; font-size: 14px;
+            border-top-left-radius: 3px; border-top-right-radius: 3px;
+        }
+        .start-menu-footer {
+            background: linear-gradient(to right, #4582d9, #a3c1ed); padding: 5px;
+            display: flex; justify-content: flex-end; gap: 5px; border-top: 1px solid #ccc;
+        }
+        
+        /* 关机选项按钮 */
+        .btn-option {
+            display: flex; align-items: center; padding: 8px 10px; font-size: 12px; color: #333; gap: 8px;
+        }
+        /* 禁用的选项 */
+        .btn-disabled { color: #999; cursor: not-allowed; }
+        .btn-disabled .icon-box { background: #ccc; }
+        /* 激活的关机选项 */
+        .btn-active { cursor: pointer; color: black; font-weight: bold; }
+        .btn-active:hover { background: rgba(0, 85, 229, 0.1); }
+        .btn-active .icon-box { background: #e81123; }
+        
+        .icon-box { width: 24px; height: 24px; border-radius: 3px; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; border: 1px solid #fff; box-shadow: 1px 1px 2px rgba(0,0,0,0.4); }
+
+
+        /* ================= 核心：未发送的举报信弹窗 ================= */
+        .xp-window {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: #ece9d8; border: 3px solid #0055e5; border-top-left-radius: 8px; border-top-right-radius: 8px;
+            box-shadow: 2px 2px 20px rgba(0,0,0,0.7); z-index: 100; min-width: 550px;
+        }
+
+        .xp-titlebar {
+            background: linear-gradient(to bottom, #0058e6 0%, #3a93ff 8%, #288eff 40%, #127dff 88%, #036bfe 100%);
+            color: white; padding: 4px 8px; font-weight: bold; font-size: 13px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+        }
+
+        .xp-content { padding: 20px; font-size: 13px; line-height: 1.6; color: #000; }
+        
+        .sys-warning { color: #cc0000; font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px; }
+        
+        .xiawei-msg {
+            background: #fff; border: 1px solid #7f9db9; padding: 15px; margin-bottom: 15px;
+            font-family: "SimSun", "宋体", serif; font-size: 14px;
+        }
+
+        .evidence-list { background: #fdfdfd; border: 1px solid #ccc; padding: 10px; margin-bottom: 20px; }
+        .evidence-item { margin-bottom: 5px; color: #333; display: flex; align-items: center; gap: 8px; }
+        .evidence-item input { pointer-events: none; }
+
+        .send-btn-wrap { text-align: center; }
+        .send-btn {
+            background: linear-gradient(to bottom, #f0f0ea, #dcdcd6); border: 1px solid #003c74;
+            padding: 8px 30px; font-size: 14px; font-weight: bold; cursor: pointer; border-radius: 3px;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        .send-btn:active { background: #dcdcd6; box-shadow: inset 1px 1px 3px rgba(0,0,0,0.4); }
+
+        .terminal-output {
+            margin-top: 15px; font-family: "SimSun", "宋体", monospace; font-size: 13px;
+            color: #008000; display: none; background: #fff; padding: 10px; border: 1px solid #ccc;
+        }
+
+        /* ================= 关机画面动画 ================= */
+        #shutdown-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #003399; z-index: 9999;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 1; transition: opacity 2s ease-in-out;
+        }
+        .shutdown-logo { font-family: "Times New Roman", serif; font-size: 50px; color: white; font-style: italic; font-weight: bold; margin-bottom: 20px; }
+        .shutdown-text { font-family: "SimSun", "宋体", sans-serif; font-size: 24px; color: white; }
+
+    </style>
+</head>
+<body>
+
+    <!-- 桌面图标 (仅装饰，无法点击) -->
+    <div class="desktop-area">
+        <div class="desktop-icon">
+            <div class="icon-img-container icon-mydocs"><div class="folder-tab"></div><div class="folder-back"></div><div class="paper"></div><div class="folder-front"></div></div>
+            <div class="icon-text">我的文档</div>
+        </div>
+        <div class="desktop-icon">
+            <div class="icon-img-container icon-ie"><div class="halo"></div><div class="e-text">e</div></div>
+            <div class="icon-text">Internet<br>Explorer</div>
+        </div>
+        <div class="desktop-icon">
+            <div class="icon-img-container icon-word"><div class="doc-bg"></div><div class="w-block">W</div></div>
+            <div class="icon-text">Word 2006</div>
+        </div>
+    </div>
+
+    <!-- 任务栏 -->
+    <div class="taskbar">
+        <button class="start-btn" onclick="toggleStartMenu()"><span class="start-logo"></span> 开始</button>
+        <div class="system-tray">
+            <span>🌐</span><span>🔊</span><span id="clock">15:32</span>
+        </div>
+    </div>
+
+    <!-- 开始菜单 (三个选项，仅关机可用) -->
+    <div class="start-menu" id="start-menu">
+        <div class="start-menu-header">Administrator</div>
+        <div style="padding: 10px; background: white; min-height: 150px;"></div>
+        <div class="start-menu-footer">
+            <div class="btn-option btn-disabled">
+                <div class="icon-box">⏾</div> 待机(S)
+            </div>
+            <div class="btn-option btn-disabled">
+                <div class="icon-box">↻</div> 重新启动(R)
+            </div>
+            <div class="btn-option btn-active" onclick="triggerShutdown()">
+                <div class="icon-box">⏻</div> 关闭计算机(U)
+            </div>
+        </div>
+    </div>
+
+    <!-- 核心：夏唯的草稿箱弹窗 -->
+    <div class="xp-window">
+        <div class="xp-titlebar">省公安厅网上举报系统 - 本地草稿箱</div>
+        <div class="xp-content">
+            <div class="sys-warning">【系统警报】检测到本地存在一封于 2006-07-05 预存的定时加密邮件。</div>
+            
+            <div class="xiawei-msg">
+                <strong>夏唯的暂存留言：</strong><br><br>
+                “对不起……我搜集了万国豪所有的罪证，但我不敢点下‘发送’。万国豪今天找过我了，他说如果这封信出现在互联网上，夏伊就会……我不能拿妹妹的命去赌，我是一个懦夫。<br><br>
+                如果有人重启了这台电脑，看到了这封草稿，说明我可能已经不在了，夏伊也安全了。请你，替我按下那个发送键，让太阳照进这个黑暗的地方。”
+            </div>
+
+            <div class="evidence-list">
+                <div style="font-weight:bold; margin-bottom:8px;">附件清单：</div>
+                <div class="evidence-item"><input type="checkbox" checked> 附件一：万盛集团非法资金往来账单与行贿记录</div>
+                <div class="evidence-item"><input type="checkbox" checked> 附件二：与万盛集团总秘林娜的通话记录</div>
+                <div class="evidence-item"><input type="checkbox" checked> 附件三：江城实验中学原版监控录像 </div>
+                <div class="evidence-item"><input type="checkbox" checked> 附件四：夏唯本人参与陷害钟夜的检讨与自白书</div>
+            </div>
+
+            <div class="send-btn-wrap" id="btn-wrap">
+                <button class="send-btn" onclick="sendDraft()">以夏唯名义，发送全部罪证</button>
+            </div>
+
+            <!-- 命令行反馈 -->
+            <div class="terminal-output" id="terminal"></div>
+        </div>
+    </div>
+
+    <!-- 关机全屏动画 -->
+    <div id="shutdown-screen">
+        <div class="shutdown-logo">Windows XP</div>
+        <div class="shutdown-text">Windows 正在关机...</div>
+    </div>
+
+<script>
+    // 结局分支状态记录：默认未发送
+    let isEvidenceSent = false;
+
+    // 更新任务栏时间
+    function updateClock() {
+        const now = new Date();
+        let h = now.getHours();
+        let m = now.getMinutes();
+        m = m < 10 ? '0' + m : m;
+        document.getElementById('clock').innerText = h + ':' + m;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // 切换开始菜单显示/隐藏
+    function toggleStartMenu() {
+        const menu = document.getElementById('start-menu');
+        menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    // 核心修改：发送证据及自动跳转逻辑 (真结局分支)
+    function sendDraft() {
+        // 标记已发送
+        isEvidenceSent = true;
+
+        // 隐藏发送按钮
+        document.getElementById('btn-wrap').style.display = 'none';
+        
+        // 显示终端命令行
+        const term = document.getElementById('terminal');
+        term.style.display = 'block';
+        term.innerHTML = "正在连接省公安厅网络...<br>";
+
+        // 模拟传输过程
+        setTimeout(() => { term.innerHTML += "正在上传加密证据包 (4/4)...<br>"; }, 1000);
+        setTimeout(() => { term.innerHTML += "正在绕过江城本地服务器拦截...<br>"; }, 2200);
+        
+        // 第 3.5 秒时：显示传输成功！
+        setTimeout(() => { 
+            term.innerHTML += "<br><span style='color:red; font-weight:bold;'>证据传输成功！案卷已编号：2006-0705-JC</span><br><br>"; 
+            term.innerHTML += "<span style='color:#000; font-weight:bold;'>“凡你所求，皆有回应。”</span><br>";
+            term.innerHTML += "<span style='color:#999; font-size:12px;'><br>(系统检测到异常追踪，即将自动切断连接并跳转...)</span>";
+        }, 3500);
+
+        // 第 6.5 秒时 (即传输成功提示出现后的 3 秒)：自动跳转到 end1.html (真结局)
+        setTimeout(() => {
+            window.location.href = 'end1.html';
+        }, 6500);
+    }
+
+    // 关机按钮逻辑 (坏结局分支判定)
+    function triggerShutdown() {
+        // 隐藏开始菜单
+        document.getElementById('start-menu').style.display = 'none';
+        
+        // 显示关机蓝屏
+        const sdScreen = document.getElementById('shutdown-screen');
+        sdScreen.style.display = 'flex';
+        
+        // 2.5秒后开始渐隐变黑
+        setTimeout(() => {
+            sdScreen.style.backgroundColor = 'black';
+            sdScreen.innerHTML = ''; // 清除文字
+        }, 2500);
+
+        // 4.5秒后执行跳转判定
+        setTimeout(() => {
+            if (isEvidenceSent) {
+                // 如果已经发送了证据，但玩家强行点了关机，依然导向真结局
+                window.location.href = 'end1.html';
+            } else {
+                // 如果没有发送证据直接点了关机，导向退缩/坏结局
+                window.location.href = 'end2.html';
+            }
+        }, 4500);
+    }
+</script>
+</body>
+</html>
