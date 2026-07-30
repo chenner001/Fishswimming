@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <title>RED HERRING BBS - 饵料详情：HeroCall</title>
+    <style>
+        /* 基础重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "NSimSun", "SimSun", "Courier New", monospace; 
+        }
+
+        /* 绝对铺满的背景，不被遮挡 */
+        body {
+            background-image: url('鱼.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #000;
+            color: #a30000;
+            overflow-x: hidden;
+        }
+
+        /* 极度透明的血色呼吸层，只加氛围 */
+        .blood-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(163, 0, 0, 0.15);
+            z-index: 1; 
+            pointer-events: none; 
+            animation: pulseBg 4s infinite alternate;
+        }
+
+        /* 模拟老式CRT显示器的极细扫描线 */
+        .crt-scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
+            background-size: 100% 2px;
+            z-index: 2; 
+            pointer-events: none; 
+        }
+
+        @keyframes pulseBg {
+            0% { background-color: rgba(163, 0, 0, 0.05); }
+            100% { background-color: rgba(163, 0, 0, 0.25); }
+        }
+
+        /* 论坛主容器 */
+        .bbs-container {
+            width: 85%;
+            max-width: 1000px;
+            margin: 40px auto;
+            position: relative;
+            z-index: 10; 
+        }
+
+        /* 顶部导航与面包屑（左上角返回搜索结果） */
+        .nav-bar {
+            margin-bottom: 30px;
+            padding: 12px 20px;
+            background: rgba(15, 0, 0, 0.85);
+            border: 1px solid rgba(150, 0, 0, 0.6);
+            font-size: 15px;
+            color: #888;
+            box-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        .nav-bar a {
+            color: #ff3333;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .nav-bar a:hover {
+            color: #fff;
+            text-shadow: 0 0 8px #ff0000;
+        }
+
+        /* 帖子主体内容区 (左侧作者，右侧内容) */
+        .post-wrapper {
+            display: flex;
+            background: rgba(0, 0, 0, 0.65); /* 高透明度露出背景鱼 */
+            border: 1px solid rgba(150, 0, 0, 0.6);
+            min-height: 450px;
+            box-shadow: 0 0 20px rgba(100, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+
+        /* 左侧作者信息 */
+        .post-author {
+            width: 240px;
+            background: rgba(15, 0, 0, 0.75);
+            border-right: 1px solid rgba(150, 0, 0, 0.4);
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .author-name {
+            color: #ff3333;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px rgba(255,0,0,0.5);
+            letter-spacing: 1px;
+        }
+
+        .author-avatar {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px auto;
+            border: 1px solid #7a0000;
+            background: #050000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5a0000;
+            font-size: 14px;
+            box-shadow: inset 0 0 15px rgba(255,0,0,0.1);
+            position: relative;
+        }
+
+        /* 头像上的被撕咬标记 */
+        .author-avatar::after {
+            content: "【已被反噬】";
+            position: absolute;
+            color: #ff0000;
+            font-weight: bold;
+            transform: rotate(-15deg);
+            opacity: 0.85;
+            font-size: 16px;
+            text-shadow: 0 0 5px #000;
+        }
+
+        .author-stats {
+            text-align: left;
+            font-size: 13px;
+            color: #888;
+            line-height: 2.0;
+            margin-top: 25px;
+            border-top: 1px dashed rgba(150,0,0,0.4);
+            padding-top: 15px;
+        }
+
+        .author-stats span {
+            color: #a30000;
+        }
+        
+        .status-dead {
+            color: #ff0000 !important;
+            text-decoration: line-through;
+            animation: textFlicker 2s infinite;
+        }
+
+        @keyframes textFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* 右侧正文内容 */
+        .post-content {
+            flex: 1;
+            padding: 35px 40px;
+            color: #cccccc; 
+            font-size: 16px;
+            line-height: 2.2;
+            position: relative;
+        }
+
+        .post-title {
+            font-size: 22px;
+            color: #ff1a1a;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed rgba(150, 0, 0, 0.4);
+            padding-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .post-date {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* 核心谎言视觉强化 */
+        .core-lie {
+            background-color: rgba(60, 0, 0, 0.3);
+            border-left: 4px solid #ff0000;
+            padding: 20px 25px;
+            margin: 25px 0;
+            color: #ffb3b3;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.15);
+        }
+
+        /* 底部系统封存戳 (文字恐怖谷) */
+        .system-stamp {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            border: 2px solid #5a0000;
+            color: #7a0000;
+            padding: 10px 15px;
+            font-weight: bold;
+            transform: rotate(-5deg);
+            opacity: 0.6;
+            font-size: 14px;
+            background: rgba(10, 0, 0, 0.8);
+            box-shadow: inset 0 0 10px rgba(255,0,0,0.1);
+        }
+
+        .system-stamp span {
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 视觉特效层 -->
+    <div class="blood-overlay"></div>
+    <div class="crt-scanlines"></div>
+
+    <div class="bbs-container">
+        
+        <!-- 左上角返回上级页 (xiaweibbs1.html) -->
+        <div class="nav-bar">
+            &lt;&lt; <a href="xiaweibbs1.html">返回检索列表 (Return to Records)</a>
+        </div>
+
+        <!-- 帖子正文详情区 -->
+        <div class="post-wrapper">
+            
+            <!-- 作者区 -->
+            <div class="post-author">
+                <div class="author-name">HeroCall</div>
+                <div class="author-avatar">
+                    无影像
+                </div>
+                <div class="author-stats">
+                    终端识别：<span>夏唯 (100%匹配)</span><br>
+                    当前状态：<span class="status-dead">肉体机能已终止</span><br>
+                    谎言烈度：<span>S级致命</span><br>
+                    撒饵时间：<span>2006-05-09</span>
+                </div>
+            </div>
+
+            <!-- 内容区 -->
+            <div class="post-content">
+                <div class="post-title">[匿名爆料] 某学生在校外偷偷售卖学校内部的高考模拟试卷，败坏校风，要求取消其保送资格！</div>
+                <div class="post-date">发布于 2006-05-09 18:02:11 | 协议：红鲱鱼底层分发 | IP：已由本系统物理抹除</div>
+                
+                <p>我是江城实验中学的知情学生。今天我必须站出来，撕破某些所谓“贫寒天才”的虚伪面具。</p>
+                <br>
+                <p>大家眼里的好学生，高三二班的那个家伙，其实一直在利用职务之便做令人不齿的勾当。他以为自己做得很隐蔽，但其实早就被人盯上了。</p>
+
+                <!-- 核心造谣文本 -->
+                <div class="core-lie">
+                    ⬛️⬛️在校外偷偷售卖学校内部的高考模拟试卷，败坏校风，严重破坏了教育的公平性。我这里有全部的截图，要求学校立刻彻查，取消其保送资格！
+                </div>
+
+                <p>不要让这种道德败坏的小偷，抢走真正努力的人的机会。请大家帮我把这件事顶上去，让教务处看到！</p>
+                
+                <!-- 骇人的系统封存印记 -->
+                <div class="system-stamp">
+                    [ 此谎言已吞噬 <span>1</span> 条人命 ]<br>
+                    // 鱼群已进食，代价已支付。
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

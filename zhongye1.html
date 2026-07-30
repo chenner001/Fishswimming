@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>钟夜 - 千度搜索</title>
+    <style>
+        /* 基础重置与千禧年 Tahoma/宋体 字体风格 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, "SimSun", "宋体", sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            font-size: 13px;
+            color: #000;
+        }
+
+        /* 顶部千度搜索 Header 区域 */
+        .qiandu-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e5e5e5;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* 经典的千度 Logo 样式 */
+        .qiandu-logo {
+            font-family: "Microsoft YaHei", sans-serif;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+        .qiandu-logo .blue { color: #0022d1; }
+        .qiandu-logo .red { color: #ae0000; }
+
+        /* 搜索框与按钮组合 */
+        .search-form {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #search-input {
+            width: 420px;
+            height: 30px;
+            padding: 0 8px;
+            font-size: 14px;
+            border: 1px solid #7f9db9;
+            outline: none;
+        }
+
+        .search-btn {
+            height: 30px;
+            padding: 0 15px;
+            background: linear-gradient(to bottom, #f2f2f2, #e1e1e1);
+            border: 1px solid #707070;
+            font-size: 13px;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .search-btn:hover {
+            background: #e5e5e5;
+        }
+
+        /* 搜索统计信息栏 */
+        .result-info {
+            padding: 8px 20px;
+            background-color: #f0f4fb;
+            color: #666;
+            font-size: 12px;
+            border-bottom: 1px solid #d9e2f3;
+        }
+
+        /* 搜索结果列表容器 */
+        .results-container {
+            padding: 20px;
+            max-width: 750px;
+        }
+
+        /* 单条搜索结果卡片 */
+        .result-item {
+            margin-bottom: 25px;
+        }
+
+        /* 经典蓝字标题 */
+        .result-title {
+            font-size: 16px;
+            color: #0000cc;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-bottom: 4px;
+            display: inline-block;
+        }
+
+        .result-title:hover {
+            color: #cc0000;
+        }
+
+        /* 摘要文字 */
+        .result-snippet {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .highlight {
+            color: #cc0000;
+            font-weight: bold;
+        }
+
+        /* 经典绿字网址与快照 */
+        .result-url {
+            font-size: 12px;
+            color: #008000;
+        }
+
+        .result-cache {
+            color: #6666cc;
+            text-decoration: underline;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        /* 页脚 */
+        .footer {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+            color: #77c;
+            font-size: 12px;
+            border-top: 1px solid #e5e5e5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部千度搜索栏 -->
+    <div class="qiandu-header">
+        <a href="#" class="qiandu-logo">
+            <span class="blue">千</span><span class="red">度</span>
+        </a>
+        <div class="search-form">
+            <!-- 预填搜索词 "钟夜" -->
+            <input type="text" id="search-input" value="钟夜" placeholder="输入搜索关键词...">
+            <button class="search-btn" id="search-btn" onclick="executeSearch()">千度一下</button>
+        </div>
+    </div>
+
+    <!-- 搜索结果统计 -->
+    <div class="result-info">
+        千度为您找到相关结果约 14,200 个，用时 0.001 秒
+    </div>
+
+    <!-- 搜索结果列表 -->
+    <div class="results-container">
+
+        <!-- 结果 1：钟夜自杀的新闻 (目标链接) -->
+        <div class="result-item">
+            <a href="news_zhongye.html" target="_blank" class="result-title">
+                江城晚报：实验中学高三学生<span class="highlight">钟夜</span>留遗书后坠江身亡，校方回应...
+            </a>
+            <div class="result-snippet">
+                【社会新闻】近日，江城实验中学高三学生<span class="highlight">钟夜</span>在江城大桥坠江身亡。据悉，该生生前曾因严重违纪行为遭到校方记大过处分及通报批评。警方在其遗物中发现了一封字迹模糊的遗书，目前已结案……
+            </div>
+            <div class="result-url">
+                www.jiangchengnews.com.cn/society/20060515/0421.html 
+                <span class="result-cache">千度快照</span>
+            </div>
+        </div>
+
+        <!-- 结果 2：家属闹事通报 (烘托剧情气氛) -->
+        <div class="result-item">
+            <a href="javascript:alert('由于相关法律法规和政策，该网页已被屏蔽。');" class="result-title">
+                【江城公安局】关于<span class="highlight">钟夜</span>家属在实验中学校门口寻衅滋事的警情通报
+            </a>
+            <div class="result-snippet">
+                针对昨日有家属在实验中学校门口拉白色横幅、就<span class="highlight">钟夜</span>坠亡事件严重扰乱教学秩序一事，辖区派出所已介入协调。校方负责人出面表示，关于该生的处分决定均有确凿证据，希望家属保持理智……
+            </div>
+            <div class="result-url">
+                www.jiangcheng.gov.cn/police/notice/2006-05/881.htm 
+                <span class="result-cache">千度快照</span>
+            </div>
+        </div>
+
+        <!-- 结果 3：匿名灵堂 (烘托悬疑感) -->
+        <div class="result-item">
+            <a href="javascript:alert('系统提示：您没有权限访问此私密纪念馆。');" class="result-title">
+                <span class="highlight">钟夜</span> - 天堂纪念网 - 永垂不朽
+            </a>
+            <div class="result-snippet">
+                纪念馆建立者：匿名。你在最深的黑暗中闭上了双眼，愿你在另一个世界没有痛苦与背叛。
+            </div>
+            <div class="result-url">
+                www.tiantangwang.com/memorial/id_992014.html 
+                <span class="result-cache">千度快照</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 页面底部 -->
+    <div class="footer">
+        千度搜索  千度一下，你就知道  ©2006 Qiandu
+    </div>
+
+    <!-- 引用 sjump.js 搜索逻辑组件 -->
+    <script src="sjump.js"></script>
+
+</body>
+</html>

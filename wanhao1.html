@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>万盛集团 - 千度搜索</title>
+    <style>
+        /* 基础重置与千禧年 Tahoma/宋体 字体风格 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, "SimSun", "宋体", sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            font-size: 13px;
+            color: #000;
+        }
+
+        /* 顶部千度搜索 Header 区域 */
+        .qiandu-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e5e5e5;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* 经典的千度 Logo 样式 */
+        .qiandu-logo {
+            font-family: "Microsoft YaHei", sans-serif;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+        .qiandu-logo .blue { color: #0022d1; }
+        .qiandu-logo .red { color: #ae0000; }
+
+        /* 搜索框与按钮组合 */
+        .search-form {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #search-input {
+            width: 420px;
+            height: 30px;
+            padding: 0 8px;
+            font-size: 14px;
+            border: 1px solid #7f9db9;
+            outline: none;
+        }
+
+        .search-btn {
+            height: 30px;
+            padding: 0 15px;
+            background: linear-gradient(to bottom, #f2f2f2, #e1e1e1);
+            border: 1px solid #707070;
+            font-size: 13px;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .search-btn:hover {
+            background: #e5e5e5;
+        }
+
+        /* 搜索统计信息栏 */
+        .result-info {
+            padding: 8px 20px;
+            background-color: #f0f4fb;
+            color: #666;
+            font-size: 12px;
+            border-bottom: 1px solid #d9e2f3;
+        }
+
+        /* 搜索结果列表容器 */
+        .results-container {
+            padding: 20px;
+            max-width: 750px;
+        }
+
+        /* 单条搜索结果卡片 */
+        .result-item {
+            margin-bottom: 25px;
+        }
+
+        /* 经典蓝字标题 */
+        .result-title {
+            font-size: 16px;
+            color: #0000cc;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-bottom: 4px;
+            display: inline-block;
+        }
+
+        .result-title:hover {
+            color: #cc0000;
+        }
+
+        /* 摘要文字 */
+        .result-snippet {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .highlight {
+            color: #cc0000;
+            font-weight: bold;
+        }
+
+        /* 经典绿字网址与快照 */
+        .result-url {
+            font-size: 12px;
+            color: #008000;
+        }
+
+        .result-cache {
+            color: #6666cc;
+            text-decoration: underline;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        /* 页脚 */
+        .footer {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+            color: #77c;
+            font-size: 12px;
+            border-top: 1px solid #e5e5e5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部千度搜索栏 -->
+    <div class="qiandu-header">
+        <a href="#" class="qiandu-logo">
+            <span class="blue">千</span><span class="red">度</span>
+        </a>
+        <div class="search-form">
+            <!-- 预填搜索词 "万盛集团" -->
+            <input type="text" id="search-input" value="万盛集团" placeholder="输入搜索关键词...">
+            <button class="search-btn" id="search-btn" onclick="executeSearch()">千度一下</button>
+        </div>
+    </div>
+
+    <!-- 搜索结果统计 -->
+    <div class="result-info">
+        千度为您找到相关结果约 3,540,000 个，用时 0.002 秒
+    </div>
+
+    <!-- 搜索结果列表 -->
+    <div class="results-container">
+
+        <!-- 结果 1：万盛地产官方网站 (目标链接) -->
+        <div class="result-item">
+            <a href="wansheng.html" target="_blank" class="result-title">
+                <span class="highlight">万盛集团</span> - 官方网站
+            </a>
+            <div class="result-snippet">
+                欢迎访问<span class="highlight">万盛集团</span>。万盛地产深耕江城十余载，业务涵盖高端住宅、商业综合体、高档酒店及城市基础设施建设。董事长万国豪先生携全体员工，致力于为您打造完美人居生活。
+            </div>
+            <div class="result-url">
+                www.wansheng-group.com.cn/ 
+                <span class="result-cache">千度快照</span>
+            </div>
+        </div>
+
+        <!-- 结果 2：财经新闻 (烘托伪善形象) -->
+        <div class="result-item">
+            <a href="javascript:alert('该网页已过期或被删除。');" class="result-title">
+                江城财经：<span class="highlight">万盛集团</span>董事长万国豪荣获“市杰出民营企业家”称号
+            </a>
+            <div class="result-snippet">
+                【经济早报】在昨日举行的江城市年度经济人物颁奖典礼上，<span class="highlight">万盛集团</span>董事长万国豪先生凭借其在江城地产界的卓越贡献及巨额教育慈善捐款，荣膺本年度“杰出民营企业家”。万国豪在致辞中表示……
+            </div>
+            <div class="result-url">
+                www.jiangcheng-finance.com/news/2006-04/182.html 
+                <span class="result-cache">千度快照</span>
+            </div>
+        </div>
+
+        <!-- 结果 3：论坛求助帖 (暗示其涉黑与权钱交易背景) -->
+        <div class="result-item">
+            <a href="javascript:alert('【系统提示】抱歉，该贴因包含敏感违规词汇已被管理员屏蔽。');" class="result-title">
+                【江城本地论坛】关于<span class="highlight">万盛地产</span>暴力强拆、只手遮天的投诉！谁来管管？！
+            </a>
+            <div class="result-snippet">
+                <span class="highlight">万盛集团</span>的工程队昨天半夜又来砸玻璃了！他们老板万国豪在江城黑白两道通吃，不仅垄断了江北的黄金地段，还跟某些医院和学校的领导勾结！出了人命也能用钱压下来，去举报根本没用……
+            </div>
+            <div class="result-url">
+                bbs.jiangcheng-life.com/thread-847291.html 
+                <span class="result-cache">千度快照</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 页面底部 -->
+    <div class="footer">
+        千度搜索  千度一下，你就知道  ©2006 Qiandu
+    </div>
+
+    <!-- 引用 sjump.js 搜索逻辑组件 -->
+    <script src="sjump.js"></script>
+
+</body>
+</html>

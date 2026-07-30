@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <title>RED HERRING BBS - [公告] 新人必看</title>
+    <style>
+        /* 基础重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "NSimSun", "SimSun", "Courier New", monospace; 
+        }
+
+        /* 沿用完美的全屏背景设置 */
+        body {
+            background-image: url('鱼.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #000;
+            color: #a30000;
+            overflow-x: hidden;
+            /* 取消渐变，让背景切换如同瞬闪一般生硬恐怖 */
+        }
+
+        /* 血色呼吸层 */
+        .blood-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(163, 0, 0, 0.15);
+            z-index: 1; 
+            pointer-events: none; 
+            animation: pulseBg 4s infinite alternate;
+        }
+
+        /* 模拟老式CRT显示器的极细扫描线 */
+        .crt-scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
+            background-size: 100% 2px;
+            z-index: 2; 
+            pointer-events: none; 
+        }
+
+        @keyframes pulseBg {
+            0% { background-color: rgba(163, 0, 0, 0.05); }
+            100% { background-color: rgba(163, 0, 0, 0.25); }
+        }
+
+        /* 论坛主容器 */
+        .bbs-container {
+            width: 85%;
+            max-width: 1000px;
+            margin: 40px auto;
+            position: relative;
+            z-index: 10; 
+        }
+
+        /* 顶部导航与面包屑 */
+        .nav-bar {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(150, 0, 0, 0.4);
+            font-size: 14px;
+            color: #888;
+        }
+
+        .nav-bar a {
+            color: #ff4444;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-bar a:hover {
+            color: #ff8888;
+            text-decoration: underline;
+        }
+
+        /* 帖子标题栏 */
+        .thread-header {
+            background: rgba(30, 0, 0, 0.8);
+            border: 1px solid rgba(150, 0, 0, 0.6);
+            border-bottom: none;
+            padding: 15px 20px;
+        }
+
+        .thread-header h2 {
+            color: #ff3333;
+            font-size: 20px;
+            font-weight: normal;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        /* 帖子主体内容区 (左侧作者，右侧内容) */
+        .post-wrapper {
+            display: flex;
+            background: rgba(0, 0, 0, 0.45); /* 高透明度露出背景鱼 */
+            border: 1px solid rgba(150, 0, 0, 0.6);
+            min-height: 400px;
+        }
+
+        /* 左侧作者信息 */
+        .post-author {
+            width: 220px;
+            background: rgba(15, 0, 0, 0.7);
+            border-right: 1px solid rgba(150, 0, 0, 0.4);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .author-name {
+            color: #ff1a1a;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 0 0 5px #ff0000;
+        }
+
+        .author-avatar {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px auto;
+            border: 1px solid #5a0000;
+            background: #0a0000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a30000;
+            font-size: 12px;
+            box-shadow: inset 0 0 10px rgba(255,0,0,0.2);
+        }
+
+        .author-stats {
+            text-align: left;
+            font-size: 12px;
+            color: #777;
+            line-height: 1.8;
+            margin-top: 20px;
+        }
+
+        .author-stats span {
+            color: #a30000;
+        }
+
+        /* 右侧正文内容 */
+        .post-content {
+            flex: 1;
+            padding: 30px;
+            color: #bbbbbb; /* 调亮正文颜色防止看不清 */
+            font-size: 15px;
+            line-height: 2.0;
+        }
+
+        .post-date {
+            font-size: 12px;
+            color: #666;
+            border-bottom: 1px dashed rgba(150, 0, 0, 0.4);
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+
+        /* 文字恐怖谷特效 */
+        .text-danger {
+            color: #ff4444;
+            font-weight: bold;
+        }
+
+        .text-glitch {
+            display: inline-block;
+            position: relative;
+            color: #fff;
+            animation: textTremble 0.1s infinite;
+        }
+
+        .text-hidden {
+            background-color: #1a0000;
+            color: #1a0000;
+            transition: all 0.5s;
+            cursor: default;
+        }
+
+        .text-hidden:hover {
+            color: #ff0000;
+            background-color: transparent;
+        }
+
+        @keyframes textTremble {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-1px, 1px); }
+            50% { transform: translate(1px, -1px); }
+            75% { transform: translate(1px, 1px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* 签名档 */
+        .signature {
+            margin-top: 60px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(150, 0, 0, 0.3);
+            font-size: 12px;
+            color: #660000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 视觉特效层 -->
+    <div class="blood-overlay"></div>
+    <div class="crt-scanlines"></div>
+
+    <div class="bbs-container">
+        
+        <!-- 面包屑导航 -->
+        <div class="nav-bar">
+            &gt; <a href="bbs.html">返回饵料池 (BBS首页)</a> 
+            &gt; 系统公告
+        </div>
+
+        <!-- 帖子标题 -->
+        <div class="thread-header">
+            <h2>[公告] 新人必看：不要试图寻找红鲱鱼的真实IP，它在你的脑子里。</h2>
+        </div>
+
+        <!-- 帖子正文区 -->
+        <div class="post-wrapper">
+            
+            <!-- 作者区 -->
+            <div class="post-author">
+                <div class="author-name">SYSTEM_GOD</div>
+                <div class="author-avatar">
+                    [系统权限]<br>无法渲染
+                </div>
+                <div class="author-stats">
+                    等级：<span>超越者</span><br>
+                    投喂数：<span>∞</span><br>
+                    精神阈值：<span>NaN</span><br>
+                    注册时间：<span>1970-01-01</span>
+                </div>
+            </div>
+
+            <!-- 内容区 -->
+            <div class="post-content">
+                <div class="post-date">发布于 200X-01-01 00:00:00 | 仅终端可见</div>
+                
+                <p>欢迎各位新孵化的游鱼，来到【红鲱鱼BBS】。</p>
+                <br>
+                <p>为了保障各位能在本水域长期存活，请强制阅读以下协议。如果您在阅读本帖时，感觉显示器边缘有轻微的呼吸感或视线扭曲，请不要恐慌。这是由于红鲱鱼论坛的渲染引擎，<span class="text-danger">正在调用您大脑皮层处理痛觉的冗余算力</span>，以维持页面的稳定。</p>
+                <br>
+                <p><strong>【核心守则第一条：关于物理载体】</strong></p>
+                <p>本论坛没有物理服务器，没有固定域名，也没有网线。我们寄生在你们视神经盲点的脑机质中，依靠人类社会分泌的恶意和谎言来维持运作。因此，<span class="text-danger">绝对不要试图使用抓包工具、Ping命令或其他技术手段去追踪本论坛的IP节点。</span></p>
+                <br>
+                <p>上一批试图这么做的用户，最终都在自己的视网膜下方看到了游动的红色鱼卵，并在此后两个月内，主动用物理手段对自己的眼球进行了<span class="text-glitch">不可逆的格式化清理</span>。</p>
+                <br>
+                <p><strong>【核心守则第二条：关于等价交换】</strong></p>
+                <p>在这里，每一条谣言都会变成现实，只要这个谣言足够恶毒。你想毁灭谁，就向池子里抛下一条“红鲱鱼（极具欺骗性的完美谎言）”。池子里的其他游鱼（网民）会为你将他生吞活剥。</p>
+                <p>但请记住，物理学定律依然适用：<span class="text-danger">质量守恒。</span></p>
+                <p>当你用谎言喂养了红鲱鱼，你就成为了生态链的一环。如果有一天，有人对你抛出了更大的鱼饵，请保持情绪稳定，默默忍受接下来的撕咬。</p>
+                <br>
+                <p>祝各位垂钓愉快。</p>
+                <br>
+                <p><span class="text-hidden">你以为你在看屏幕，其实是红鲱鱼在屏幕里面看着你。</span></p>
+                
+                <div class="signature">
+                    // 别往下看。<br>
+                    // 别回头。
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 触底惊悚彩蛋脚本 -->
+    <script>
+        // 记录当前是否已经切换了背景图
+        let isCreepyBg = false;
+
+        // 检测触底且继续向下的逻辑
+        function checkScrollEvent(e) {
+            // 获取当前滚动的距离、可见区域高度、页面总高度
+            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            let windowHeight = document.documentElement.clientHeight;
+            let scrollHeight = document.documentElement.scrollHeight;
+
+            // 预留2像素的误差防止浏览器小数计算不到位
+            let isAtBottom = (Math.ceil(scrollTop + windowHeight) >= scrollHeight - 2);
+
+            if (isAtBottom) {
+                // 如果到底部了，且玩家是往下滚轮 (deltaY > 0) 或者通过拖拽直接拉到底
+                // 这里把事件兼容处理，只要到底部就切换
+                if (!isCreepyBg) {
+                    document.body.style.backgroundImage = "url('鱼1.png')";
+                    isCreepyBg = true;
+                }
+            } else {
+                // 只要没在最底部（即滚回上面去了），立刻恢复
+                if (isCreepyBg) {
+                    document.body.style.backgroundImage = "url('鱼.png')";
+                    isCreepyBg = false;
+                }
+            }
+        }
+
+        // 监听滚动事件（处理键盘、拖拽滚动条、触屏滚动）
+        window.addEventListener('scroll', checkScrollEvent);
+        
+        // 监听鼠标滚轮事件（处理“到底了还硬要往下拨滚轮”的情况，反应更灵敏）
+        window.addEventListener('wheel', function(e) {
+            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            let windowHeight = document.documentElement.clientHeight;
+            let scrollHeight = document.documentElement.scrollHeight;
+            
+            // 如果已经在底部，且鼠标还在往下滚
+            if (Math.ceil(scrollTop + windowHeight) >= scrollHeight - 2 && e.deltaY > 0) {
+                if (!isCreepyBg) {
+                    document.body.style.backgroundImage = "url('鱼1.png')";
+                    isCreepyBg = true;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

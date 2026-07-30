@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <title>RED HERRING BBS - 饵料详情：夜游神</title>
+    <style>
+        /* 基础重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "NSimSun", "SimSun", "Courier New", monospace; 
+        }
+
+        /* 绝对铺满的背景，不被遮挡 */
+        body {
+            background-image: url('鱼.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #000;
+            color: #a30000;
+            overflow-x: hidden;
+        }
+
+        /* 极度透明的血色呼吸层，只加氛围 */
+        .blood-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(163, 0, 0, 0.15);
+            z-index: 1; 
+            pointer-events: none; 
+            animation: pulseBg 4s infinite alternate;
+        }
+
+        /* 模拟老式CRT显示器的极细扫描线 */
+        .crt-scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
+            background-size: 100% 2px;
+            z-index: 2; 
+            pointer-events: none; 
+        }
+
+        @keyframes pulseBg {
+            0% { background-color: rgba(163, 0, 0, 0.05); }
+            100% { background-color: rgba(163, 0, 0, 0.25); }
+        }
+
+        /* 论坛主容器 */
+        .bbs-container {
+            width: 85%;
+            max-width: 1000px;
+            margin: 40px auto;
+            position: relative;
+            z-index: 10; 
+        }
+
+        /* 顶部导航与面包屑（左上角返回搜索结果） */
+        .nav-bar {
+            margin-bottom: 30px;
+            padding: 12px 20px;
+            background: rgba(15, 0, 0, 0.85);
+            border: 1px solid rgba(150, 0, 0, 0.6);
+            font-size: 15px;
+            color: #888;
+            box-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        .nav-bar a {
+            color: #ff3333;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .nav-bar a:hover {
+            color: #fff;
+            text-shadow: 0 0 8px #ff0000;
+        }
+
+        /* 帖子主体内容区 (左侧作者，右侧内容) */
+        .post-wrapper {
+            display: flex;
+            background: rgba(0, 0, 0, 0.75); /* 调暗背景以突出血字 */
+            border: 1px solid #7a0000;
+            min-height: 500px;
+            box-shadow: 0 0 30px rgba(200, 0, 0, 0.2);
+            margin-top: 20px;
+        }
+
+        /* 左侧作者信息 */
+        .post-author {
+            width: 240px;
+            background: rgba(15, 0, 0, 0.85);
+            border-right: 1px solid rgba(150, 0, 0, 0.4);
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .author-name {
+            color: #ff0000;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #ff0000;
+            letter-spacing: 2px;
+            animation: textFlicker 2s infinite;
+        }
+
+        .author-avatar {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px auto;
+            border: 1px solid #7a0000;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5a0000;
+            font-size: 14px;
+            box-shadow: inset 0 0 20px rgba(255,0,0,0.3);
+            position: relative;
+        }
+
+        .author-avatar::after {
+            content: "【复仇锁定】";
+            position: absolute;
+            color: #ff3333;
+            font-weight: bold;
+            font-size: 16px;
+            text-shadow: 0 0 5px #000;
+        }
+
+        .author-stats {
+            text-align: left;
+            font-size: 13px;
+            color: #888;
+            line-height: 2.0;
+            margin-top: 25px;
+            border-top: 1px dashed rgba(150,0,0,0.4);
+            padding-top: 15px;
+        }
+
+        .author-stats span {
+            color: #a30000;
+        }
+        
+        .status-frenzy {
+            color: #ff0000 !important;
+            font-weight: bold;
+        }
+
+        /* 右侧正文内容 */
+        .post-content {
+            flex: 1;
+            padding: 35px 40px;
+            color: #cccccc; 
+            font-size: 16px;
+            line-height: 2.2;
+            position: relative;
+        }
+
+        .post-title {
+            font-size: 24px;
+            color: #ff1a1a;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #7a0000;
+            padding-bottom: 15px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        .post-date {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .angry-text {
+            color: #e6e6e6;
+            font-size: 17px;
+            margin-bottom: 15px;
+        }
+
+        .angry-highlight {
+            color: #ff3333;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* 曝光图片容器 */
+        .evidence-box {
+            background-color: #050000;
+            border: 2px dashed #ff0000;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.15);
+        }
+
+        .evidence-box img {
+            max-width: 100%;
+            border: 1px solid #4a0000;
+            filter: contrast(110%) brightness(90%);
+        }
+
+        .evidence-caption {
+            color: #ff6666;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 15px;
+            letter-spacing: 1px;
+        }
+
+        /* 骇人的血债血偿文本 */
+        .blood-debt {
+            font-size: 26px;
+            color: #ff0000;
+            font-weight: bold;
+            text-align: center;
+            margin: 40px 0 20px 0;
+            letter-spacing: 5px;
+            text-shadow: 0 0 10px #ff0000;
+            animation: shake 0.5s infinite;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        @keyframes textFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; text-shadow: 0 0 20px red; }
+        }
+
+        /* 底部系统封存戳 */
+        .system-stamp {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            border: 2px solid #5a0000;
+            color: #7a0000;
+            padding: 10px 15px;
+            font-weight: bold;
+            transform: rotate(-5deg);
+            opacity: 0.8;
+            font-size: 14px;
+            background: rgba(10, 0, 0, 0.9);
+            box-shadow: inset 0 0 10px rgba(255,0,0,0.3);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- 视觉特效层 -->
+    <div class="blood-overlay"></div>
+    <div class="crt-scanlines"></div>
+
+    <div class="bbs-container">
+        
+        <!-- 左上角返回上级页 (zhongbbs1.html) -->
+        <div class="nav-bar">
+            &lt;&lt; <a href="zhongbbs1.html">返回检索列表 (Return to Records)</a>
+        </div>
+
+        <!-- 帖子正文详情区 -->
+        <div class="post-wrapper">
+            
+            <!-- 作者区 -->
+            <div class="post-author">
+                <div class="author-name">夜游神</div>
+                <div class="author-avatar">
+                    无影像
+                </div>
+                <div class="author-stats">
+                    终端识别：<span>钟溯 (高危实体)</span><br>
+                    当前状态：<span class="status-frenzy">极度狂躁 / 丧失理智</span><br>
+                    怨念烈度：<span>S级致死量</span><br>
+                    发布时间：<span>2006-05-15</span>
+                </div>
+            </div>
+
+            <!-- 内容区 -->
+            <div class="post-content">
+                <div class="post-title">[血腥爆料] 《实验中学女播音员夏唯人肉纪实·高档酒店开房图曝光》</div>
+                <div class="post-date">发布于 2006-05-15 02:44:11 | 协议：红鲱鱼底层分发 | IP：追踪失败 (目标在移动中)</div>
+                
+                <p class="angry-text">
+                    你们眼里清纯正义的校花，那个举报我弟弟倒卖试卷的“正义使者”，私底下到底是个什么货色？！
+                </p>
+                <p class="angry-text">
+                    我弟死了。从那么高的水塔上跳下去，摔得面目全非！他连饭都吃不饱，连一件像样的衣服都买不起，他怎么可能去卖那种一套500块钱的狗屁试卷？！<span class="angry-highlight">是她造的谣！是她毁了我弟的一辈子！！</span>
+                </p>
+                <p class="angry-text">
+                    我这几天一直跟着这个贱人，像鬼一样跟着她。终于让我逮到了。
+                </p>
+
+                <!-- 核心偷拍照片 -->
+                <div class="evidence-box">
+                    <img src="偷拍.png" alt="夏唯上豪车的偷拍照片">
+                    <div class="evidence-caption">
+                        [ 证据确凿：夏唯在某高档酒店门口从一辆黑色的奥迪A6下车 ]
+                    </div>
+                </div>
+
+                <p class="angry-text">
+                    睁大你们的眼睛看看吧！还在穿校服呢，就迫不及待地钻进老男人的豪车里去卖！车牌号我拍得清清楚楚！
+                </p>
+                <p class="angry-text">
+                    这就是她污蔑我弟换来的筹码！这就是她拿到保送名额的肮脏手段！
+                </p>
+
+                <!-- 丧失理智的复仇宣言 -->
+                <div class="blood-debt">
+                    血 债 血 偿 ！！！！！！！！！
+                </div>
+
+                <p class="angry-text" style="text-align: center; color: #ff6666;">
+                    夏唯，我弟在下面看着你。这只是个开始。<br>
+                    我要把你扒得干干净净，让全校、全市的人都看看你的真面目！我要让你生不如死！<br>
+                    有想知道她后续的，这是我的邮箱：yeyoushenfindsyou@163.com
+                </p>
+                
+                <!-- 骇人的系统封存印记 -->
+                <div class="system-stamp">
+                    [ 系统警告：检测到极端的复仇执念 ]<br>
+                    // 新的猎物已被锁定。
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

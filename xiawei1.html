@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>夏唯 - 千度搜索</title>
+    <style>
+        /* 基础重置与千禧年 Tahoma/宋体 字体风格 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, "SimSun", "宋体", sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            font-size: 13px;
+            color: #000;
+        }
+
+        /* 顶部千度搜索 Header 区域 */
+        .qiandu-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e5e5e5;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* 经典的千度 Logo 样式 */
+        .qiandu-logo {
+            font-family: "Microsoft YaHei", sans-serif;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+        .qiandu-logo .blue { color: #0022d1; }
+        .qiandu-logo .red { color: #ae0000; }
+
+        /* 搜索框与按钮组合 */
+        .search-form {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #search-input {
+            width: 420px;
+            height: 30px;
+            padding: 0 8px;
+            font-size: 14px;
+            border: 1px solid #7f9db9;
+            outline: none;
+        }
+
+        .search-btn {
+            height: 30px;
+            padding: 0 15px;
+            background: linear-gradient(to bottom, #f2f2f2, #e1e1e1);
+            border: 1px solid #707070;
+            font-size: 13px;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .search-btn:hover {
+            background: #e5e5e5;
+        }
+
+        /* 搜索统计信息栏 */
+        .result-info {
+            padding: 8px 20px;
+            background-color: #f0f4fb;
+            color: #666;
+            font-size: 12px;
+            border-bottom: 1px solid #d9e2f3;
+        }
+
+        /* 搜索结果列表容器 */
+        .results-container {
+            padding: 20px;
+            max-width: 750px;
+        }
+
+        /* 单条搜索结果卡片 */
+        .result-item {
+            margin-bottom: 25px;
+        }
+
+        /* 经典蓝字标题 */
+        .result-title {
+            font-size: 16px;
+            color: #0000cc;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-bottom: 4px;
+            display: inline-block;
+        }
+
+        .result-title:hover {
+            color: #cc0000;
+        }
+
+        /* 摘要文字 */
+        .result-snippet {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .highlight {
+            color: #cc0000;
+            font-weight: bold;
+        }
+
+        /* 经典绿字网址与快照 */
+        .result-url {
+            font-size: 12px;
+            color: #008000;
+        }
+
+        .result-cache {
+            color: #6666cc;
+            text-decoration: underline;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        /* 页脚 */
+        .footer {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+            color: #77c;
+            font-size: 12px;
+            border-top: 1px solid #e5e5e5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部千度搜索栏 -->
+    <div class="qiandu-header">
+        <a href="#" class="qiandu-logo">
+            <span class="blue">千</span><span class="red">度</span>
+        </a>
+        <div class="search-form">
+            <!-- 预填搜索词 "夏唯" -->
+            <input type="text" id="search-input" value="夏唯" placeholder="输入搜索关键词...">
+            <button class="search-btn" id="search-btn" onclick="executeSearch()">千度一下</button>
+        </div>
+    </div>
+
+    <!-- 搜索结果统计 -->
+    <div class="result-info">
+        千度为您找到相关结果约 2 个，用时 0.002 秒
+    </div>
+
+    <!-- 搜索结果列表 -->
+    <div class="results-container">
+
+        <!-- 结果 1：夏唯自杀新闻 -->
+        <div class="result-item">
+            <a href="xiaweinews.html" target="_blank" class="result-title">
+                江城晚报：某中学高三毕业学生<span class="highlight">夏唯</span>不幸坠亡 警方已排除他杀
+            </a>
+            <div class="result-snippet">
+                【江城快讯】2006年7月6日晨，江城市某中学高三毕业学生<span class="highlight">夏唯</span>（女，18岁）被发现在学校后山坠亡。经现场勘查及法医鉴定，已排除他杀可能。据同事件知情人透露，<span class="highlight">夏唯</span>近期情绪低落……
+            </div>
+            <div class="result-url">
+                www.jiangchengnews.com.cn/news/20060512/09421.html 2006-5-12
+                <span class="result-cache">千度快照</span>
+            </div>
+        </div>
+
+        <!-- 结果 2：夏唯的博客 -->
+        <div class="result-item">
+            <a href="bokelogin.html" target="_blank" class="result-title">
+                <span class="highlight">夏唯</span>的私人博客 - 新浪博客
+            </a>
+            <div class="result-snippet">
+                新浪博客 - <span class="highlight">夏唯</span>的个人空间：小鱼小鱼快快游，四面八方皆自由。
+            </div>
+            <div class="result-url">
+                blog.sina.com.cn/u/xiawei_fm986 2006-5-08 
+                <span class="result-cache">千度快照</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 页面底部 -->
+    <div class="footer">
+        千度搜索  千度一下，你就知道  ©2006 Qiandu
+    </div>
+
+    <!-- 引用 sjump.js 搜索逻辑组件 -->
+    <script src="sjump.js"></script>
+
+</body>
+</html>
