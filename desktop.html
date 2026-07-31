@@ -332,6 +332,30 @@
             border-bottom: none;
         }
 
+        /* 简单的文本文档图标 */
+        .simple-txt-icon {
+            width: 32px; height: 42px;
+            background: #fff;
+            border: 1px solid #aaa;
+            position: relative;
+            margin-bottom: 5px;
+            /* 模拟文本行 */
+            background-image: repeating-linear-gradient(to bottom, transparent, transparent 3px, #ccc 3px, #ccc 4px);
+            background-position: 0 8px;
+            background-repeat: no-repeat;
+            background-size: 100% 25px;
+        }
+        /* 右上角折角效果 */
+        .simple-txt-icon::after {
+            content: '';
+            position: absolute;
+            top: -1px; right: -1px;
+            width: 10px; height: 10px;
+            background: #fff;
+            border-left: 1px solid #aaa;
+            border-bottom: 1px solid #aaa;
+        }
+
         /* ================= 密码输入弹窗 ================= */
         .pwd-input {
             width: 100%;
@@ -439,7 +463,7 @@
     <!-- ================= 桌面图标区 ================= -->
     <div class="desktop-area">
         
-        <!-- 1. 我的文档 -->
+        <!-- 1. 夏唯的文档 -->
         <div class="desktop-icon" onclick="openWindow('main-folder')">
             <div class="icon-img-container icon-mydocs">
                 <div class="folder-tab"></div>
@@ -447,7 +471,7 @@
                 <div class="paper"></div>
                 <div class="folder-front"></div>
             </div>
-            <div class="icon-text">我的文档</div>
+            <div class="icon-text">夏唯的文档</div>
         </div>
 
         <!-- 2. IE 浏览器 -->
@@ -499,6 +523,28 @@
                     <div class="simple-folder-icon"></div>
                     <div class="icon-text">瓮中之鱼</div>
                 </div>
+                <!-- 新增：备忘录文本文档 -->
+                <div class="sub-folder" onclick="openWindow('txt-password-hint')">
+                    <div class="simple-txt-icon"></div>
+                    <div class="icon-text">备忘录.txt</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 记事本窗口 (密码提示) -->
+    <div class="xp-window" id="txt-password-hint" style="z-index: 140;">
+        <div class="xp-titlebar">
+            <span>备忘录.txt - 记事本</span>
+            <div class="xp-close-btn" onclick="closeWindow('txt-password-hint')">X</div>
+        </div>
+        <div class="word-toolbar">
+            <span>文件(F)</span><span>编辑(E)</span><span>格式(O)</span><span>查看(V)</span><span>帮助(H)</span>
+        </div>
+        <div class="xp-content" style="padding: 0; border-top: 1px solid #ccc;">
+            <!-- 模拟记事本白色文本区 -->
+            <div style="background: white; width: 400px; height: 200px; padding: 10px; font-family: 'SimSun', '宋体', monospace; font-size: 14px; user-select: text; cursor: text;">
+                为什么密码只能设置成数字
             </div>
         </div>
     </div>
