@@ -15,7 +15,7 @@
 
         /* 沿用完美的全屏背景设置 */
         body {
-            background-image: url('鱼.png');
+            background-image: url('鱼.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -308,13 +308,13 @@
                 // 如果到底部了，且玩家是往下滚轮 (deltaY > 0) 或者通过拖拽直接拉到底
                 // 这里把事件兼容处理，只要到底部就切换
                 if (!isCreepyBg) {
-                    document.body.style.backgroundImage = "url('鱼1.png')";
+                    document.body.style.backgroundImage = "url('鱼1.jpg')";
                     isCreepyBg = true;
                 }
             } else {
                 // 只要没在最底部（即滚回上面去了），立刻恢复
                 if (isCreepyBg) {
-                    document.body.style.backgroundImage = "url('鱼.png')";
+                    document.body.style.backgroundImage = "url('鱼.jpg')";
                     isCreepyBg = false;
                 }
             }
@@ -332,7 +332,7 @@
             // 如果已经在底部，且鼠标还在往下滚
             if (Math.ceil(scrollTop + windowHeight) >= scrollHeight - 2 && e.deltaY > 0) {
                 if (!isCreepyBg) {
-                    document.body.style.backgroundImage = "url('鱼1.png')";
+                    document.body.style.backgroundImage = "url('鱼1.jpg')";
                     isCreepyBg = true;
                 }
             }
